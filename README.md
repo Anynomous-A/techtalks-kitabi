@@ -36,7 +36,7 @@ A lightweight, mobile‑first web app for Lebanon that connects students, librar
 
 ## 👥 Team & Responsibilities
 - **Nizar abou ibrahim** – Team Lead, Backend/API development,Frontend/UI, Database, Research  
-- *yehya allaw*  – Backend/API development,Frontend/UI, Database, Research
+- **Yehya Allaw**  – Backend/API development,Frontend/UI, Database, Research
 - *youseg alkadri* – Backend/API development,Frontend/UI, Database, Research
 - *mahmood koros* – Backend/API development,Frontend/UI, Database, Research
 - GitHub usernames: [to be added]  
