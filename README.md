@@ -1,10 +1,6 @@
 # techtalks-kitabi
 A lightweight, mobile‑first web app for Lebanon that connects students, libraries, and individuals to buy and sell new or used books at affordable prices. The platform focuses on simplicity:
 
-# Bookly Lebanon 📚
-A lightweight, mobile‑first web app that helps students, libraries, and individuals in Lebanon buy and sell new or used books at affordable prices.
-
----
 
 ## 📖 Project Overview
 **Problem:** Students and readers struggle with the high cost of new books. Used books are scattered across WhatsApp groups or word‑of‑mouth, wasting time and limiting access.  
@@ -39,8 +35,10 @@ A lightweight, mobile‑first web app that helps students, libraries, and indivi
 ---
 
 ## 👥 Team & Responsibilities
-- **Nizar** – Team Lead, Backend/API development  
-- **[Add teammates here]** – Frontend/UI, Database, Research  
+- **Nizar abou ibrahim** – Team Lead, Backend/API development,Frontend/UI, Database, Research  
+- *yehya allaw*  – Backend/API development,Frontend/UI, Database, Research
+- *youseg alkadri* – Backend/API development,Frontend/UI, Database, Research
+- *mahmood koros* – Backend/API development,Frontend/UI, Database, Research
 - GitHub usernames: [to be added]  
 - Contact: [team email or group chat link]
 
