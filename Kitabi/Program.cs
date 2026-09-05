@@ -1,4 +1,12 @@
+using Kitabi.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("Kitabi");
+builder.Services.AddSqlServer<ApplicationDbContext>(connectionString);
+
+
+
 
 // Add services to the container.
 builder.Services.AddRazorPages();
