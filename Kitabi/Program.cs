@@ -1,4 +1,5 @@
 using Kitabi.Data;
+using Kitabi.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,11 +24,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
-
 app.MapRazorPages();
 
+
+app.MigrateDb();
+app.MapBookEndpoints();
+app.MapImageEndpoints();  
 app.Run();
