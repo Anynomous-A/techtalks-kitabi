@@ -22,25 +22,26 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+ 
 using (var scope = app.Services.CreateScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-    if (!db.Users.Any(u => u.UserId == 1))
+var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+if (!db.Users.Any(u => u.UserId == 1))
+{
+    db.Users.Add(new User
     {
-        db.Users.Add(new User
-        {
-            Name = "Nizar",
-            Email = "nizar@example.com",
-            PasswordHash = "dummyhash",   // any string works for testing
-            Phone = "123456789",
-            University = "AUB",
-            Listings = new List<Listing>() // initialize empty list
-        });
-        db.SaveChanges();
-    }
-}
+        Name = "Nizar",
+        Email = "nizar@example.com",
+        PasswordHash = "dummyhash",   // any string works for testing
+        Phone = "123456789",
+        University = "AUB",
+        Listings = new List<Listing>() // initialize empty list
+    });
+    db.SaveChanges();
 
+}
+}
+     
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
