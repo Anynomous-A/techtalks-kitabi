@@ -24,6 +24,11 @@ namespace Kitabi.Data
 
             modelBuilder.Entity<ListingImage>().HasKey(i => i.ImageId);
 
+            //Name
+            modelBuilder.Entity<User>()
+            .HasIndex(u => u.Name)
+            .IsUnique();
+
             // User
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
