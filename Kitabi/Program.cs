@@ -4,6 +4,7 @@ using Kitabi.Endpoints;
 using Kitabi.Extensions;
 using Kitabi.Interfaces;
 using Kitabi.Models;
+using Microsoft.OpenApi.Models;
 using Kitabi.Policies;
 using Kitabi.Services;
 
@@ -65,7 +66,7 @@ app.MigrateDb();
 app.MapBookEndpoints();
 app.MapImageEndpoints();
 app.MapListingEndpoints();
-
+app.MapCommunicationEndpoints();
 app.MapAuthEndpoints();
 
 app.Run();
