@@ -62,3 +62,58 @@ dotnet run
 
 # Database setup
 # Create SQL Server DB and update connection string in appsettings.json
+
+
+. Sprint 1 Outcomes
+
+✅ Database schema created (Users, Listings).
+
+✅ Book posting API implemented (POST /api/books).
+
+✅ Search API basic version implemented (GET /listings/search).
+
+✅ WhatsApp/SMS contact endpoint added.
+
+✅ Seeded test user (UserId = 1) for development.
+
+✅ README updated with setup instructions.
+
+3. Setup Instructions
+
+How to run the app locally:
+
+bash
+dotnet run
+Database setup (EF Core migrations, seeding).
+
+Test user credentials (dummy email, phone, password hash).
+
+4. Usage Examples
+
+Create a book listing (form-data):
+
+Code
+POST /api/books
+SellerId=1
+Title=Algorithms
+Author=Cormen
+Price=25
+Condition=Good
+City=Beirut
+Search listings:
+
+Code
+GET /listings/search?title=Algorithms
+5. Known Limitations (Sprint 1)
+
+No authentication yet.
+
+No advanced search filters (coming in Sprint 2).
+
+No frontend UI (planned for Sprint 3).
+
+6. Next Steps
+
+Sprint 2 will focus on security (auth, validation, HTTPS) and enhanced search filters.
+
+Sprint 3 will deliver the frontend integration.
