@@ -35,9 +35,6 @@ namespace Kitabi.Dtos.Book
         [property: StringLength(80, ErrorMessage = "City name must not exceed 80 characters")]
         string City,
 
-        [property: Required(ErrorMessage = "Seller ID is required")]
-        int SellerId,
-
         IFormFileCollection? Images
     );
 }
