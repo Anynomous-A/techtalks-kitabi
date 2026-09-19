@@ -6,7 +6,7 @@ using Kitabi.Interfaces;
 using Kitabi.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CafeBackend.Endpoints;
+namespace Kitabi.Endpoints;
 
 public static class AuthEndpoints
 {

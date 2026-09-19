@@ -1,6 +1,5 @@
-using CafeBackend.Endpoints;
-using Kitabi.Data;
 using Kitabi.Endpoints;
+using Kitabi.Data;
 using Kitabi.Extensions;
 using Kitabi.Interfaces;
 using Kitabi.Models;
@@ -21,7 +20,7 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
-builder.Services.AddAppAuthentication();
+builder.Services.AddAppAuthentication(builder.Configuration);
 builder.Services.AddAppPolicies();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
