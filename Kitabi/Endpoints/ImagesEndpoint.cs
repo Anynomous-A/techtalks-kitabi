@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Kitabi.Data;
 using Kitabi.Models;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +12,8 @@ namespace Kitabi.Endpoints
             var group = app.MapGroup("/api/books/{listingId:int}/images");
 
             group.MapGet("/", async (int listingId, ApplicationDbContext dbContext) =>
-            {
+            {   
+            
                 var listing = await dbContext.Listings
                     .AsNoTracking()
                     .Include(l => l.Images)
@@ -29,12 +31,16 @@ namespace Kitabi.Endpoints
                 return Results.Ok(images);
             });
 
-          group.MapPost("/", async (int listingId,IFormFileCollection images, ApplicationDbContext dbContext, IWebHostEnvironment env) =>
+          group.MapPost("/", async (int listingId,IFormFileCollection images, ApplicationDbContext dbContext, IWebHostEnvironment env , HttpContext http) =>
             {
-                
+                 var userIdClaim = http.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                 if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+                 return Results.Unauthorized();
+
+
                 var listing = await dbContext.Listings
                     .Include(l => l.Images)
-                    .FirstOrDefaultAsync(l => l.ListingId == listingId && l.Status != "Removed");
+                    .FirstOrDefaultAsync(l => l.ListingId == listingId && l.Status != "Removed" && l.SellerId == userId);
 
                 if (listing is null)
                     return Results.NotFound(new { error = "Listing not found" });
@@ -92,12 +98,17 @@ namespace Kitabi.Endpoints
                     totalImages = listing.Images.Count
                 });
             })
-            .DisableAntiforgery();
+            .DisableAntiforgery()
+            .RequireAuthorization();
 
-            group.MapDelete("/{imageId:int}", async (int listingId, int imageId, ApplicationDbContext dbContext) =>
-            {
+            group.MapDelete("/{imageId:int}", async (int listingId, int imageId, ApplicationDbContext dbContext, HttpContext http) =>
+            {   
+                 var userIdClaim = http.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                 if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+                 return Results.Unauthorized();
+
                 var image = await dbContext.ListingImages
-                    .FirstOrDefaultAsync(i => i.ListingId == listingId && i.ImageId == imageId);
+                    .FirstOrDefaultAsync(i => i.ListingId == listingId && i.ImageId == imageId && i.Listing.SellerId == userId);
 
                 if (image is null)
                     return Results.NotFound(new { error = "Image not found" });
@@ -111,7 +122,7 @@ namespace Kitabi.Endpoints
                 await dbContext.SaveChangesAsync();
 
                 return Results.Ok(new { message = "Image deleted successfully" });
-            });
+            }).RequireAuthorization();
         }
     }
 }

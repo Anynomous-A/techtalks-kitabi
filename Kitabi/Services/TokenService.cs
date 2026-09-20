@@ -11,14 +11,13 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Kitabi.Services;
 
-public class TokenService(ApplicationDbContext dbContext) : ITokenService
+public class TokenService(ApplicationDbContext dbContext , IConfiguration configuration) : ITokenService
 {
-    private const string JwtKey = "this_is_my_super_powerful_private_key_12_43";
-
-
+   
+  
     public string GenerateAccessToken(User user)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtKey));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]

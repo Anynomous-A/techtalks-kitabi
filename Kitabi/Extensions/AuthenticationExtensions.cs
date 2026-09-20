@@ -6,10 +6,8 @@ namespace Kitabi.Extensions
     public static class AuthenticationExtensions
     {
 
-        public static void AddAppAuthentication(this IServiceCollection services)
+        public static void AddAppAuthentication(this IServiceCollection services , IConfiguration configuration)
         {
-            const string secretKey = "THIS_IS_A_VERY_LONG_SECRET_KEY_CHANGE_ME_1234567890";
-
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = "JWTScheme";
@@ -23,9 +21,9 @@ namespace Kitabi.Extensions
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = "MyServer",
-                    ValidAudience = "MyClient",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                    ValidIssuer = "MyClient",
+                    ValidAudience = "MyServer",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
                 };
             });
         }

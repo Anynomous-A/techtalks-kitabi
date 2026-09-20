@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Kitabi.Data;
 using Kitabi.Dtos.Book;
 using Kitabi.Filters;
@@ -70,14 +71,16 @@ namespace Kitabi.Endpoints
             });
 
     
-            group.MapPost("/", async ([FromForm] CreateBookDto newBook, ApplicationDbContext dbContext) =>
-           {
+            group.MapPost("/", async ([FromForm] CreateBookDto newBook, ApplicationDbContext dbContext, HttpContext http) =>
+           {    
+                var userIdClaim = http.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                 if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+                 return Results.Unauthorized();
+        
 
-                int sellerId = 1;
-
-                var seller = await dbContext.Users.FindAsync(sellerId);
+                var seller = await dbContext.Users.FindAsync(userId);
                 if (seller is null)
-                    return Results.BadRequest(new { error = "Test user not found. Please create a user with ID = 1" });
+                return Results.Unauthorized();
 
                 var images = newBook.Images;
                 
@@ -117,7 +120,6 @@ namespace Kitabi.Endpoints
                 {
                     Book = book,
                     Seller = seller,
-                    SellerId = newBook.SellerId,
                     Price = newBook.Price,
                     Condition = newBook.Condition,
                     City = newBook.City,
@@ -152,17 +154,24 @@ namespace Kitabi.Endpoints
                 return Results.Created($"/api/books/{listing.ListingId}", new { listingId = listing.ListingId });
             })
             .AddEndpointFilter<ValidationFilter<CreateBookDto>>()
-            .DisableAntiforgery();
+            .DisableAntiforgery()
+            .RequireAuthorization();
 
        
-            group.MapPut("/{id}", async (int id, [FromForm] UpdateBookDto updatedBook, ApplicationDbContext dbContext) =>
-            {
+            group.MapPut("/{id}", async (int id, [FromForm] UpdateBookDto updatedBook, ApplicationDbContext dbContext, HttpContext http) =>
+            {   
+                 var userIdClaim = http.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                 if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+                 return Results.Unauthorized();
+
+
                 var existingListing = await dbContext.Listings
                     .Include(l => l.Book)
-                    .FirstOrDefaultAsync(l => l.ListingId == id);
+                    .FirstOrDefaultAsync(l => l.ListingId == id && l.SellerId == userId);
 
                 if (existingListing is null)
                     return Results.NotFound();
+
 
                 existingListing.Book.Title = updatedBook.Title;
                 existingListing.Book.Author = string.IsNullOrWhiteSpace(updatedBook.Author) ? "Unknown" : updatedBook.Author;
@@ -181,19 +190,26 @@ namespace Kitabi.Endpoints
 
                 return Results.Ok(new { listingId = existingListing.ListingId });
             })
-            .AddEndpointFilter<ValidationFilter<UpdateBookDto>>();
+            .AddEndpointFilter<ValidationFilter<UpdateBookDto>>()
+            .DisableAntiforgery()
+            .RequireAuthorization();
 
            
-          group.MapDelete("/{id}", async (int id, ApplicationDbContext dbContext) =>
-        {
+          group.MapDelete("/{id}", async (int id, ApplicationDbContext dbContext , HttpContext http) =>
+        {   
+
+            var userIdClaim = http.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+            return Results.Unauthorized();
+
+
              var listing = await dbContext.Listings
             .Include(l => l.Images) 
-            .FirstOrDefaultAsync(l => l.ListingId == id);
+            .FirstOrDefaultAsync(l => l.ListingId == id && l.SellerId == userId);
 
             if (listing is null)
             return Results.NotFound();
 
-   
             foreach (var image in listing.Images)
             {
             var filePath = Path.Combine("wwwroot", image.ImageUrl.TrimStart('/'));
@@ -205,7 +221,7 @@ namespace Kitabi.Endpoints
             await dbContext.SaveChangesAsync();
 
              return Results.NoContent();
-         });
+         }).RequireAuthorization();
         }
     }
 }
