@@ -23,6 +23,7 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddAppAuthentication(builder.Configuration);
 builder.Services.AddAppPolicies();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
@@ -106,5 +107,45 @@ app.MapImageEndpoints();
 app.MapListingEndpoints();
 app.MapCommunicationEndpoints();
 app.MapAuthEndpoints();
+app.Use(async (context, next) =>
+{
+    // Only sanitize JSON requests
+    if (context.Request.ContentType != null &&
+        context.Request.ContentType.Contains("application/json"))
+    {
+        // Enable buffering so we can read the body
+        context.Request.EnableBuffering();
+
+        using var reader = new StreamReader(context.Request.Body, leaveOpen: true);
+        var body = await reader.ReadToEndAsync();
+        context.Request.Body.Position = 0;
+
+        if (!string.IsNullOrWhiteSpace(body))
+        {
+            // Example: strip HTML globally
+            body = System.Text.RegularExpressions.Regex.Replace(body, "<.*?>", string.Empty);
+
+            // You could also trim strings here if needed
+        }
+    }
+
+    await next();
+});
+
+app.Use(async (context, next) =>
+{
+    await next();
+
+    if (context.Response.StatusCode == 400 &&
+        context.Items.ContainsKey("errors"))
+    {
+        var errors = context.Items["errors"];
+        await context.Response.WriteAsJsonAsync(new
+        {
+            message = "Validation failed",
+            errors
+        });
+    }
+});
 
 app.Run();

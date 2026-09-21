@@ -15,8 +15,9 @@ namespace Kitabi.Dtos.Book
         string Category,
 
         [property: StringLength(20, ErrorMessage = "ISBN must not exceed 20 characters")]
+        [property: RegularExpression(@"^\d{10}(\d{3})?$", ErrorMessage = "ISBN must be 10 or 13 digits")]
         string? Isbn,
-        
+
         [property: Required(ErrorMessage = "Description is required")]
         [property: StringLength(1000, ErrorMessage = "Description must not exceed 1000 characters")]
         string Description,
@@ -26,15 +27,14 @@ namespace Kitabi.Dtos.Book
         decimal Price,
 
         [property: Required(ErrorMessage = "Condition is required")]
-        [property: StringLength(60, ErrorMessage = "Condition must not exceed 60 characters")]
+        [property: RegularExpression("^(New|Good|Fair|Poor)$", ErrorMessage = "Condition must be New, Good, Fair, or Poor")]
         string Condition,
 
         [property: Required(ErrorMessage = "City is required")]
         [property: StringLength(80, ErrorMessage = "City name must not exceed 80 characters")]
         string City,
 
-        [property: RegularExpression("^(Available|Removed)$", 
-        ErrorMessage = "Status must be: Available or Removed")]
+        [property: RegularExpression("^(Available|Removed)$", ErrorMessage = "Status must be: Available or Removed")]
         string? Status
     );
 }
