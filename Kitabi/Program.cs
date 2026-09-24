@@ -5,7 +5,7 @@ using Kitabi.Interfaces;
 using Kitabi.Models;
 using Microsoft.OpenApi.Models;
 using Kitabi.Policies;
-using Kitabi.Services;      
+using Kitabi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,6 +58,14 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+builder.Services.Configure<ImageUploadOptions>(builder.Configuration.GetSection("ImageUpload"));
+builder.Services.AddSingleton<IImageStorage, ImageStorage>();
+
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.Limits.MaxRequestBodySize = 60 * 1024 * 1024; // 60 MB
+});
+
 
 var app = builder.Build();
 
@@ -94,7 +102,20 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+//app.UseStaticFiles();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        if (ctx.Context.Request.Path.StartsWithSegments("/uploads"))
+        {
+            ctx.Context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+            ctx.Context.Response.Headers["Content-Security-Policy"] = "default-src 'none'";
+        }
+    }
+});
+
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

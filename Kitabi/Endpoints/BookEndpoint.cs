@@ -3,6 +3,7 @@ using Kitabi.Data;
 using Kitabi.Dtos.Book;
 using Kitabi.Filters;
 using Kitabi.Models;
+using Kitabi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,9 @@ namespace Kitabi.Endpoints
 {
     public static class BookEndpoints
     {
+        // 10 files x 5 MB + multipart overhead 
+        private const long MaxRequestBytes = 55 * 1024 * 1024;
+
         public static void MapBookEndpoints(this IEndpointRouteBuilder app)
         {
             var group = app.MapGroup("/api/books");
@@ -70,42 +74,37 @@ namespace Kitabi.Endpoints
                     ));
             });
 
-    
-            group.MapPost("/", async ([FromForm] CreateBookDto newBook, ApplicationDbContext dbContext, HttpContext http) =>
-           {    
+
+            group.MapPost("/", async ([FromForm] CreateBookDto newBook, ApplicationDbContext dbContext,
+                                      IImageStorage storage, HttpContext http) =>
+            {
                 var userIdClaim = http.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                 if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
-                 return Results.Unauthorized();
-        
+                if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+                    return Results.Unauthorized();
 
                 var seller = await dbContext.Users.FindAsync(userId);
                 if (seller is null)
-                return Results.Unauthorized();
+                    return Results.Unauthorized();
 
                 var images = newBook.Images;
-                
+
+                //validate every file up front nothing is written to disk yet.
+                var validated = new List<(IFormFile File, string Ext)>();
                 if (images is not null)
-             {
-                 var allowedTypes = new[] { "image/jpeg", "image/png", "image/jpg", "image/gif" };
-                 const long maxFileSize = 5 * 1024 * 1024; 
-                 const int maxImages = 10;
+                {
+                    if (images.Count > storage.MaxFilesPerListing)
+                        return Results.BadRequest(new { error = $"Maximum {storage.MaxFilesPerListing} images allowed per listing" });
 
-       
-                if (images.Count > maxImages)
-                return Results.BadRequest(new { error = $"Maximum {maxImages} images allowed per listing" });
+                    foreach (var file in images)
+                    {
+                        var result = await storage.ValidateAsync(file);
+                        if (!result.Ok)
+                            return Results.BadRequest(new { error = result.Error });
 
-                foreach (var file in images)
-             {
-            
-                if (!allowedTypes.Contains(file.ContentType))
-                return Results.BadRequest(new { error = $"Invalid file type: {file.FileName}. Only JPEG, PNG, and GIF allowed" });
+                        validated.Add((file, result.Extension!));
+                    }
+                }
 
-                
-          
-               if (file.Length > maxFileSize)
-                return Results.BadRequest(new { error = $"File too large: {file.FileName}. Maximum 5MB" });
-             }
-           }
                 Book book = new()
                 {
                     Title = newBook.Title,
@@ -128,41 +127,45 @@ namespace Kitabi.Endpoints
                     Images = new List<ListingImage>()
                 };
 
-                if (images is not null)
-                {   
-                    var uploadDir = Path.Combine("wwwroot", "uploads");
-                    Directory.CreateDirectory(uploadDir);
-
-                    foreach (var file in images)
+                //save files, then save to the DB.
+                // If the DB save fails, delete whatever was written so we don't leave non used files.
+                var savedUrls = new List<string>();
+                try
+                {
+                    foreach (var (file, ext) in validated)
                     {
-                        var fileName = $"{Guid.NewGuid()}_{file.FileName}";
-                        var path = Path.Combine(uploadDir, fileName);
-                        using var stream = File.Create(path);
-                        await file.CopyToAsync(stream);
+                        var url = await storage.SaveAsync(file, ext);
+                        savedUrls.Add(url);
 
                         listing.Images.Add(new ListingImage
                         {
-                            ImageUrl = $"/uploads/{fileName}",
+                            ImageUrl = url,
                             Listing = listing
                         });
                     }
-                }
 
-                dbContext.Listings.Add(listing);
-                await dbContext.SaveChangesAsync();
+                    dbContext.Listings.Add(listing);
+                    await dbContext.SaveChangesAsync();
+                }
+                catch
+                {
+                    foreach (var url in savedUrls) storage.Delete(url);
+                    throw;
+                }
 
                 return Results.Created($"/api/books/{listing.ListingId}", new { listingId = listing.ListingId });
             })
+            .WithMetadata(new RequestSizeLimitAttribute(MaxRequestBytes))
             .AddEndpointFilter<ValidationFilter<CreateBookDto>>()
             .DisableAntiforgery()
             .RequireAuthorization();
 
-       
+
             group.MapPut("/{id}", async (int id, [FromForm] UpdateBookDto updatedBook, ApplicationDbContext dbContext, HttpContext http) =>
-            {   
-                 var userIdClaim = http.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                 if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
-                 return Results.Unauthorized();
+            {
+                var userIdClaim = http.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+                    return Results.Unauthorized();
 
 
                 var existingListing = await dbContext.Listings
@@ -194,34 +197,31 @@ namespace Kitabi.Endpoints
             .DisableAntiforgery()
             .RequireAuthorization();
 
-           
-          group.MapDelete("/{id}", async (int id, ApplicationDbContext dbContext , HttpContext http) =>
-        {   
 
-            var userIdClaim = http.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
-            return Results.Unauthorized();
-
-
-             var listing = await dbContext.Listings
-            .Include(l => l.Images) 
-            .FirstOrDefaultAsync(l => l.ListingId == id && l.SellerId == userId);
-
-            if (listing is null)
-            return Results.NotFound();
-
-            foreach (var image in listing.Images)
+            group.MapDelete("/{id}", async (int id, ApplicationDbContext dbContext, IImageStorage storage, HttpContext http) =>
             {
-            var filePath = Path.Combine("wwwroot", image.ImageUrl.TrimStart('/'));
-            if (File.Exists(filePath))
-            File.Delete(filePath);
-            }
+                var userIdClaim = http.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+                    return Results.Unauthorized();
 
-            listing.Status = "Removed";
-            await dbContext.SaveChangesAsync();
 
-             return Results.NoContent();
-         }).RequireAuthorization();
+                var listing = await dbContext.Listings
+                    .Include(l => l.Images)
+                    .FirstOrDefaultAsync(l => l.ListingId == id && l.SellerId == userId);
+
+                if (listing is null)
+                    return Results.NotFound();
+
+                foreach (var image in listing.Images)
+                {
+                    storage.Delete(image.ImageUrl);
+                }
+
+                listing.Status = "Removed";
+                await dbContext.SaveChangesAsync();
+
+                return Results.NoContent();
+            }).RequireAuthorization();
         }
     }
 }

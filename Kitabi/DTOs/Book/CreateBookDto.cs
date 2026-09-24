@@ -36,7 +36,7 @@ namespace Kitabi.Dtos.Book
         [property: StringLength(80, ErrorMessage = "City name must not exceed 80 characters")]
         string City,
 
-        [property: MaxLength(5, ErrorMessage = "You can upload up to 5 images")]
+
         IFormFileCollection? Images
     );
 }
