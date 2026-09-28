@@ -12,7 +12,7 @@ public static class AuthEndpoints
 {
     public static void MapAuthEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/auth");
+        var group = app.MapGroup("/api/auth").RequireRateLimiting(Kitabi.Extensions.RateLimitingExtensions.AuthPolicy);
 
 
         group.MapPost("/register", async (RegisterDto model, ApplicationDbContext db, IPasswordHasher passwordHasher) =>
@@ -50,17 +50,26 @@ public static class AuthEndpoints
         })
         .AddEndpointFilter<ValidationFilter<RegisterDto>>();
 
-        group.MapPost("/login", async (LoginDto model, ApplicationDbContext db, IPasswordHasher passwordHasher, ITokenService tokenService) =>
+        group.MapPost("/login", async (LoginDto model, ApplicationDbContext db, IPasswordHasher passwordHasher, ITokenService tokenService, ISecurityEventLogger securityLogger, HttpContext httpContext) =>
         {
             var name = model.Name.Trim();
+            var ip = httpContext.Connection.RemoteIpAddress?.ToString();
 
             var user = await db.Users.FirstOrDefaultAsync(u => u.Name == name);
             if (user == null)
+            {
+                securityLogger.LogFailedLogin(name, ip);
                 return Results.BadRequest(new { error = "Invalid name or password" });
+            }
+
 
             var isValid = passwordHasher.Verify(user.PasswordHash, model.Password);
             if (!isValid)
+            {
+                securityLogger.LogFailedLogin(name, ip);
                 return Results.BadRequest(new { error = "Invalid name or password" });
+            }
+
 
             var accessToken = tokenService.GenerateAccessToken(user);
             var refreshToken = await tokenService.GenerateRefreshTokenAsync(user);
@@ -76,12 +85,19 @@ public static class AuthEndpoints
         .AddEndpointFilter<ValidationFilter<LoginDto>>();
 
 
-        group.MapPost("/refresh", async (RefreshTokenRequestDto model, ITokenService tokenService) =>
+        group.MapPost("/refresh", async (RefreshTokenRequestDto model, ITokenService tokenService, ISecurityEventLogger securityLogger, HttpContext httpContext) =>
         {
             var result = await tokenService.RefreshTokenAsync(model.RefreshToken);
 
+
+
+
             if (result == null)
+            {
+                securityLogger.LogInvalidToken("expired or unknown refresh token", httpContext.Connection.RemoteIpAddress?.ToString());
                 return Results.Unauthorized();
+            }
+
 
             return Results.Ok(new { message = "Token refreshed successfully", data = result });
         })

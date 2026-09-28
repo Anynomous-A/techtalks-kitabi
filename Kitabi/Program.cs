@@ -6,6 +6,16 @@ using Kitabi.Models;
 using Microsoft.OpenApi.Models;
 using Kitabi.Policies;
 using Kitabi.Services;
+using Serilog;
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Warning()
+    .WriteTo.File(
+        "logs/kitabi-.log",
+        rollingInterval: RollingInterval.Day,
+        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}")
+    .CreateLogger();
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,6 +75,10 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
 {
     serverOptions.Limits.MaxRequestBodySize = 60 * 1024 * 1024; // 60 MB
 });
+builder.Services.AddAppRateLimiting();
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<ISecurityEventLogger, SecurityEventLogger>();
+builder.Host.UseSerilog();
 
 
 var app = builder.Build();
@@ -117,6 +131,7 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 app.UseRouting();
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapRazorPages();
@@ -169,4 +184,11 @@ app.Use(async (context, next) =>
     }
 });
 
-app.Run();
+try
+{
+    app.Run();
+}
+finally
+{
+    Log.CloseAndFlush();
+}
