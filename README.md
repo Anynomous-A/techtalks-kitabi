@@ -114,6 +114,51 @@ No frontend UI (planned for Sprint 3).
 
 6. Next Steps
 
-Sprint 2 will focus on security (auth, validation, HTTPS) and enhanced search filters.
+## 📅 Sprint 2 Outcomes
 
-Sprint 3 will deliver the frontend integration.
+✅ Implemented **global input validation and sanitization middleware**  
+- All JSON requests are sanitized (HTML stripped, strings trimmed).  
+- Invalid payloads return structured error responses (`400 Bad Request` with JSON message + errors).  
+
+✅ Added **authentication & security policies**  
+- JWT Bearer authentication integrated into Swagger.  
+- Role‑based policies applied to protected endpoints.  
+
+✅ Seeded **5 sample users** (buyers/sellers combined)  
+- Users include realistic names, emails, universities, and listings.  
+- Some users act as sellers with multiple listings, others as buyers only.  
+- Enables testing of both buyer and seller flows.  
+
+✅ Enhanced **search API**  
+- Listings can be queried by title, author, or category.  
+- Results include seller and book details.  
+
+---
+
+### 🔍 How to Test Sprint 2
+1. **Run the app** and open Swagger UI.  
+2. **Authentication**:  
+   - Use JWT Bearer tokens to access protected endpoints.  
+   - Swagger now shows the `Authorize` button.  
+3. **Validation**:  
+   - Submit invalid payloads (e.g., missing required fields).  
+   - Confirm structured error JSON is returned.  
+4. **Seeding**:  
+   - Query `/listings/search` to see seeded books (e.g., *Clean Code*, *Database Systems*).  
+   - Test buyer/seller flows using seeded users (`nizar@example.com`, `sara@example.com`, etc.).  
+
+---
+
+### ⚠️ Known Limitations (Sprint 2)
+- No advanced search filters yet (planned for Sprint 3).  
+- No frontend UI (planned for Sprint 3).  
+- File/image upload limited to basic functionality.  
+
+---
+
+### 🚀 Next Steps
+- **Sprint 3** will deliver:  
+  - Frontend integration (mobile‑first UI).  
+  - Advanced search filters (by city, condition, price range).  
+  - Improved listing image handling.  
+
