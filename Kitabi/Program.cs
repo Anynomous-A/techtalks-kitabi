@@ -99,21 +99,145 @@ if (app.Environment.IsDevelopment())
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    if (!db.Users.Any(u => u.UserId == 1))
+
+    if (!db.Users.Any())
     {
-        db.Users.Add(new User
+        var user1 = new User
         {
             Name = "Nizar",
             Email = "nizar@example.com",
-            PasswordHash = "dummyhash",   // any string works for testing
+            PasswordHash = "dummyhash",
             Phone = "123456789",
             University = "AUB",
-            Listings = new List<Listing>() // initialize empty list
-        });
-        db.SaveChanges();
+            Listings = new List<Listing>()
+        };
 
+        var user2 = new User
+        {
+            Name = "Sara",
+            Email = "sara@example.com",
+            PasswordHash = "dummyhash",
+            Phone = "987654321",
+            University = "LAU",
+            Listings = new List<Listing>()
+        };
+
+        var user3 = new User
+        {
+            Name = "Ali",
+            Email = "ali@example.com",
+            PasswordHash = "dummyhash",
+            Phone = "555555555",
+            University = "USJ",
+            Listings = new List<Listing>()
+        };
+
+        var user4 = new User
+        {
+            Name = "Maya",
+            Email = "maya@example.com",
+            PasswordHash = "dummyhash",
+            Phone = "111222333",
+            University = "BAU",
+            Listings = new List<Listing>()
+        };
+
+        var user5 = new User
+        {
+            Name = "Omar",
+            Email = "omar@example.com",
+            PasswordHash = "dummyhash",
+            Phone = "444555666",
+            University = "LIU",
+            Listings = new List<Listing>()
+        };
+
+        // Now add listings and set Seller explicitly
+        user1.Listings.Add(new Listing
+        {
+            Price = 20,
+            Condition = "Good",
+            City = "Beirut",
+            Status = "Active",
+            CreatedAt = DateTime.UtcNow,
+            Book = new Book
+            {
+                Title = "Clean Code",
+                Author = "Robert C. Martin",
+                Category = "Programming",
+                ISBN = "9780132350884",
+                Description = "Classic programming practices",
+                Listings = new List<Listing>()
+            },
+            Images = new List<ListingImage>(),
+            Seller = user1
+        });
+
+        user2.Listings.Add(new Listing
+        {
+            Price = 25,
+            Condition = "Like New",
+            City = "Tripoli",
+            Status = "Active",
+            CreatedAt = DateTime.UtcNow,
+            Book = new Book
+            {
+                Title = "Database Systems",
+                Author = "Elmasri & Navathe",
+                Category = "Databases",
+                ISBN = "9780133970777",
+                Description = "Intro to DBMS",
+                Listings = new List<Listing>()
+            },
+            Images = new List<ListingImage>(),
+            Seller = user2
+        });
+
+        user3.Listings.Add(new Listing
+        {
+            Price = 40,
+            Condition = "Fair",
+            City = "Saida",
+            Status = "Active",
+            CreatedAt = DateTime.UtcNow,
+            Book = new Book
+            {
+                Title = "Operating Systems",
+                Author = "Silberschatz",
+                Category = "Systems",
+                ISBN = "9781119456339",
+                Description = "Concepts and design",
+                Listings = new List<Listing>()
+            },
+            Images = new List<ListingImage>(),
+            Seller = user3
+        });
+
+        user5.Listings.Add(new Listing
+        {
+            Price = 35,
+            Condition = "Excellent",
+            City = "Tyre",
+            Status = "Active",
+            CreatedAt = DateTime.UtcNow,
+            Book = new Book
+            {
+                Title = "Computer Networks",
+                Author = "Tanenbaum",
+                Category = "Networking",
+                ISBN = "9780132126952",
+                Description = "Networking fundamentals",
+                Listings = new List<Listing>()
+            },
+            Images = new List<ListingImage>(),
+            Seller = user5
+        });
+
+        db.Users.AddRange(user1, user2, user3, user4, user5);
+        db.SaveChanges();
     }
 }
+
 
 app.UseHttpsRedirection();
 //app.UseStaticFiles();
