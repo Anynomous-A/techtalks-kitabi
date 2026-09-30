@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login — Kitabi</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+    <main class="auth-wrap">
+
+        <a class="auth-logo" href="/Frontend/index.html">
+            <img src="images/logo.png" alt="Kitabi" />
+            <span>Buy • Sell • Share Books</span>
+        </a>
+
+        <section class="card">
+            <h1>Welcome back</h1>
+            <p class="subtitle">Log in to your Kitabi account.</p>
+
+            <form id="loginForm" novalidate>
+
+                <div class="field">
+                    <label for="name">Name</label>
+                    <input
+                        id="name"
+                        name="name"
+                        type="text"
+                        placeholder="Your name"
+                        required
+                        minlength="3"
+                        maxlength="50"
+                        autocomplete="username"
+                    />
+                    <div class="field-error" data-error-for="name"></div>
+                </div>
+
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        placeholder="Enter your password"
+                        required
+                        minlength="6"
+                        maxlength="100"
+                        autocomplete="current-password"
+                    />
+                    <div class="field-error" data-error-for="password"></div>
+                </div>
+
+                <div id="alert" class="alert" role="alert"></div>
+
+                <button type="submit" id="submitBtn" class="btn btn-primary btn-block">Login</button>
+
+            </form>
+
+            <p class="link-row">
+                Don't have an account? <a href="/Frontend/register.html">Register</a>
+            </p>
+        </section>
+
+        <div class="stack"></div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>
