@@ -58,7 +58,7 @@ async function apiFetch(path, options = {}, allowRetry = true) {
 
     
         localStorage.removeItem("user");
-        window.location.href = "/Frontend/login.html";
+        window.location.href = "login.html";
         throw new Error("Session expired");
     }
 
