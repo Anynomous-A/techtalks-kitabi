@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register — Kitabi</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+    <main class="auth-wrap">
+
+        <a class="auth-logo" href="/Frontend/index.html">
+            <img src="images/logo.png" alt="Kitabi" />
+            <span>Buy • Sell • Share Books</span>
+        </a>
+
+        <section class="card">
+            <h1>Create your account</h1>
+            <p class="subtitle">Join Kitabi to buy and sell books.</p>
+
+            <form id="registerForm" novalidate>
+
+                <div class="field">
+                    <label for="name">Name</label>
+                    <input
+                        id="name"
+                        name="name"
+                        type="text"
+                        placeholder="Your name"
+                        required
+                        minlength="3"
+                        maxlength="50"
+                        autocomplete="name"
+                    />
+                    <div class="field-error" data-error-for="name"></div>
+                </div>
+
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="you@example.com"
+                        required
+                        autocomplete="email"
+                    />
+                    <div class="field-error" data-error-for="email"></div>
+                </div>
+
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        placeholder="Create a password"
+                        required
+                        minlength="6"
+                        maxlength="100"
+                        autocomplete="new-password"
+                    />
+                    <div class="field-error" data-error-for="password"></div>
+                </div>
+
+                <div class="field">
+                    <label for="phone">Phone</label>
+                    <input
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        required
+                        placeholder="70123456"
+                        autocomplete="tel"
+                    />
+                    <div class="field-error" data-error-for="phone"></div>
+                </div>
+
+                <div class="field">
+                    <label for="university">University</label>
+                    <input
+                        id="university"
+                        name="university"
+                        type="text"
+                        placeholder="e.g. Lebanese University"
+                        required
+                        maxlength="100"
+                    />
+                    <div class="field-error" data-error-for="university"></div>
+                </div>
+
+                <div id="alert" class="alert" role="alert"></div>
+
+                <button type="submit" id="submitBtn" class="btn btn-primary btn-block">Register</button>
+
+            </form>
+
+            <p class="link-row">
+                Already have an account? <a href="/Frontend/login.html">Log in</a>
+            </p>
+        </section>
+
+        <div class="stack"></div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/register.js"></script>
+
+</body>
+</html>

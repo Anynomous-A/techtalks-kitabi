@@ -23,7 +23,16 @@ var connectionString = builder.Configuration.GetConnectionString("Kitabi");
 builder.Services.AddSqlServer<ApplicationDbContext>(connectionString);
 
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+        policy.WithOrigins(
+                "http://localhost:5500",
+                "http://127.0.0.1:5500")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials());
+});
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -255,6 +264,7 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 app.UseRouting();
+app.UseCors("Frontend");
 app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
