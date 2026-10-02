@@ -87,7 +87,7 @@ form.addEventListener("submit", async (e) => {
         clearFieldErrors();
 
         setTimeout(() => {
-            window.location.href = "/Frontend/login.html";
+            window.location.href = "login.html";
         }, 1200);
 
     } catch (err) {
