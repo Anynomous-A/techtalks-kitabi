@@ -6,30 +6,29 @@ using Kitabi.Interfaces;
 using Kitabi.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CafeBackend.Endpoints;
+namespace Kitabi.Endpoints;
 
 public static class AuthEndpoints
 {
     public static void MapAuthEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/auth");
+        var group = app.MapGroup("/api/auth")
+            .RequireRateLimiting(Kitabi.Extensions.RateLimitingExtensions.AuthPolicy);
 
 
+      
         group.MapPost("/register", async (RegisterDto model, ApplicationDbContext db, IPasswordHasher passwordHasher) =>
         {
             var email = model.Email.Trim().ToLower();
             var name = model.Name.Trim();
 
-
             var emailExists = await db.Users.AnyAsync(u => u.Email == email);
             if (emailExists)
                 return Results.BadRequest(new { error = "Email already registered" });
 
-
             var nameExists = await db.Users.AnyAsync(u => u.Name == name);
             if (nameExists)
                 return Results.BadRequest(new { error = "Name already taken" });
-
 
             var user = new User
             {
@@ -39,8 +38,6 @@ public static class AuthEndpoints
                 Phone = model.Phone.Trim(),
                 University = model.University.Trim(),
                 Listings = new List<Listing>()
-
-
             };
 
             db.Users.Add(user);
@@ -50,20 +47,45 @@ public static class AuthEndpoints
         })
         .AddEndpointFilter<ValidationFilter<RegisterDto>>();
 
-        group.MapPost("/login", async (LoginDto model, ApplicationDbContext db, IPasswordHasher passwordHasher, ITokenService tokenService) =>
+
+       
+        group.MapPost("/login", async (LoginDto model, ApplicationDbContext db, IPasswordHasher passwordHasher, ITokenService tokenService, ISecurityEventLogger securityLogger, HttpContext httpContext) =>
         {
             var name = model.Name.Trim();
+            var ip = httpContext.Connection.RemoteIpAddress?.ToString();
 
             var user = await db.Users.FirstOrDefaultAsync(u => u.Name == name);
             if (user == null)
+            {
+                securityLogger.LogFailedLogin(name, ip);
                 return Results.BadRequest(new { error = "Invalid name or password" });
+            }
 
             var isValid = passwordHasher.Verify(user.PasswordHash, model.Password);
             if (!isValid)
+            {
+                securityLogger.LogFailedLogin(name, ip);
                 return Results.BadRequest(new { error = "Invalid name or password" });
+            }
 
-            var accessToken = tokenService.GenerateAccessToken(user);
+            var accessToken  = tokenService.GenerateAccessToken(user);
             var refreshToken = await tokenService.GenerateRefreshTokenAsync(user);
+
+            httpContext.Response.Cookies.Append("accessToken", accessToken, new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.Lax,
+                Secure   = false,   // true in production (HTTPS)
+                Expires  = DateTime.UtcNow.AddMinutes(30)
+            });
+
+            httpContext.Response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.Lax,
+                Secure   = false,
+                Expires  = DateTime.UtcNow.AddDays(7)
+            });
 
             var response = new AuthResponseDto(
                 accessToken,
@@ -76,26 +98,79 @@ public static class AuthEndpoints
         .AddEndpointFilter<ValidationFilter<LoginDto>>();
 
 
-        group.MapPost("/refresh", async (RefreshTokenRequestDto model, ITokenService tokenService) =>
+    
+        group.MapPost("/refresh", async (RefreshTokenRequestDto model, ITokenService tokenService, ISecurityEventLogger securityLogger, HttpContext httpContext) =>
         {
-            var result = await tokenService.RefreshTokenAsync(model.RefreshToken);
+          
+            var refreshToken = httpContext.Request.Cookies["refreshToken"];
+
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                refreshToken = model.RefreshToken;
+            }
+
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                securityLogger.LogInvalidToken("no refresh token provided", httpContext.Connection.RemoteIpAddress?.ToString());
+                return Results.Unauthorized();
+            }
+
+            var result = await tokenService.RefreshTokenAsync(refreshToken);
 
             if (result == null)
+            {
+                securityLogger.LogInvalidToken("expired or unknown refresh token", httpContext.Connection.RemoteIpAddress?.ToString());
+                httpContext.Response.Cookies.Delete("accessToken");
+                httpContext.Response.Cookies.Delete("refreshToken");
                 return Results.Unauthorized();
+            }
+
+          
+            httpContext.Response.Cookies.Append("accessToken", result.AccessToken, new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.Lax,
+                Secure   = false,
+                Expires  = DateTime.UtcNow.AddMinutes(30)
+            });
+
+            httpContext.Response.Cookies.Append("refreshToken", result.RefreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.Lax,
+                Secure   = false,
+                Expires  = DateTime.UtcNow.AddDays(7)
+            });
 
             return Results.Ok(new { message = "Token refreshed successfully", data = result });
         })
         .AddEndpointFilter<ValidationFilter<RefreshTokenRequestDto>>();
 
 
-        group.MapPost("/logout", async (RefreshTokenRequestDto model, ApplicationDbContext db) =>
+     
+        group.MapPost("/logout", async (RefreshTokenRequestDto model, ApplicationDbContext db, HttpContext httpContext) =>
         {
-            var token = await db.Tokens.FirstOrDefaultAsync(t => t.RefreshToken == model.RefreshToken);
-            if (token == null)
-                return Results.BadRequest(new { error = "Failed to logout" });
+            var refreshToken = httpContext.Request.Cookies["refreshToken"];
 
-            db.Tokens.Remove(token);
-            await db.SaveChangesAsync();
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                refreshToken = model.RefreshToken;
+            }
+
+            httpContext.Response.Cookies.Delete("accessToken");
+            httpContext.Response.Cookies.Delete("refreshToken");
+
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                return Results.Ok(new { message = "Logged out successfully" });
+            }
+
+            var token = await db.Tokens.FirstOrDefaultAsync(t => t.RefreshToken == refreshToken);
+            if (token != null)
+            {
+                db.Tokens.Remove(token);
+                await db.SaveChangesAsync();
+            }
 
             return Results.Ok(new { message = "Logged out successfully" });
         })

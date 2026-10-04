@@ -3,14 +3,14 @@
     public class ListingDto
     {
         public int ListingId { get; set; }
-        public string Title { get; set; }
-        public string Author { get; set; }
-        public string Category { get; set; }
+        public required string Title { get; set; }
+        public required string Author { get; set; }
+        public required string Category { get; set; }
         public decimal Price { get; set; }
-        public string Condition { get; set; }
-        public string City { get; set; }
-        public string Status { get; set; }
-        public string SellerName { get; set; }
+        public required string Condition { get; set; }
+        public required string City { get; set; }
+        public required string Status { get; set; }
+        public required string SellerName { get; set; }
     }
 
 }
