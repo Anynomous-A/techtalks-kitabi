@@ -64,3 +64,11 @@ Microsoft.Data.SqlClient.SqlException (0x80131904): A network-related or instanc
    at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.Enumerator.MoveNext()
 ClientConnectionId:00000000-0000-0000-0000-000000000000
 Error Number:2,State:0,Class:20
+2026-10-04 21:29:44 [WRN] Failed to determine the https port for redirect.
+2026-10-04 21:34:16 [WRN] Failed to determine the https port for redirect.
+2026-10-04 21:45:31 [WRN] Failed to determine the https port for redirect.
+2026-10-04 21:47:58 [WRN] SECURITY_EVENT: FailedLogin | User=aws | IP=::1 | Time="2026-10-04T18:47:58.8971349Z"
+2026-10-04 21:48:04 [WRN] SECURITY_EVENT: FailedLogin | User=alw | IP=::1 | Time="2026-10-04T18:48:04.5678207Z"
+2026-10-04 22:23:06 [WRN] Failed to determine the https port for redirect.
+2026-10-04 22:25:17 [WRN] Failed to determine the https port for redirect.
+2026-10-04 22:49:12 [WRN] Failed to determine the https port for redirect.

@@ -1,0 +1,6 @@
+2026-10-05 10:16:46 [WRN] Failed to determine the https port for redirect.
+2026-10-05 10:27:24 [WRN] Failed to determine the https port for redirect.
+2026-10-05 10:36:00 [WRN] Failed to determine the https port for redirect.
+2026-10-05 10:57:28 [WRN] Failed to determine the https port for redirect.
+2026-10-05 11:10:56 [WRN] Failed to determine the https port for redirect.
+2026-10-05 11:39:41 [WRN] SECURITY_EVENT: InvalidToken | Reason=expired or unknown refresh token | IP=::1 | Time="2026-10-05T08:39:41.0608039Z"

@@ -26,7 +26,7 @@ builder.Services.AddSqlServer<ApplicationDbContext>(connectionString);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
-        policy.WithOrigins(
+        policy.WithOrigins("https://localhost:7004/",
                 "http://localhost:5500",
                 "http://127.0.0.1:5500")
               .AllowAnyHeader()
