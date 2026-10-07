@@ -73,70 +73,12 @@ form.addEventListener("submit", async (e) => {
 
     const firstName = user?.name || data.name;
     showAlert(`Welcome to Kitabi, ${firstName}!`, "success");
-    /*
-// ---------- TEMPORARY: AUTH FLOW VERIFICATION ----------
-console.log("===== AUTH FLOW TEST =====");
-console.log("Cookie (JS can see):", document.cookie);
-console.log("AccessToken hidden from JS:", !document.cookie.includes("accessToken"));
-console.log("RefreshToken hidden from JS:", !document.cookie.includes("refreshToken"));
 
-// 1) Authenticated request WITHOUT a token — should be 401
-try {
-    const res = await fetch("http://localhost:5042/api/books", { method: "POST" });
-    console.log("1. POST /api/books WITHOUT cookies → status:", res.status, "(expected 401)");
-} catch (e) {
-    console.log("1. Failed:", e.message);
-}
+     setTimeout(() => {
+      window.location.href = "index.html";
+    }, 1000);
+   
 
-// 2) Authenticated request WITH the cookie — should succeed
-try {
-    const form = new FormData();
-    form.append("Title", "Test Book " + Date.now());
-    form.append("Author", "Test Author");
-    form.append("Category", "Test");
-    form.append("Isbn", "1234567890");
-    form.append("Description", "Testing cookie auth");
-    form.append("Price", "9.99");
-    form.append("Condition", "Good");
-    form.append("City", "Beirut");
-
-    const created = await API.post("/api/books", form);
-    console.log("2. POST /api/books WITH cookie → success, listingId:", created?.listingId);
-} catch (e) {
-    console.log("2. POST /api/books FAILED:", e.status, e.message);
-}
-
-// 3) Refresh the session
-try {
-    const refreshResult = await API.post("/api/auth/refresh", { refreshToken: "" });
-    console.log("3. POST /api/auth/refresh →", refreshResult?.message);
-} catch (e) {
-    console.log("3. Refresh FAILED:", e.status, e.message);
-}
-
-// 4) Authenticated request again AFTER refresh
-try {
-    const form = new FormData();
-    form.append("Title", "Test Book After Refresh " + Date.now());
-    form.append("Author", "Test Author");
-    form.append("Category", "Test");
-    form.append("Isbn", "1234567890");
-    form.append("Description", "Testing new cookie");
-    form.append("Price", "19.99");
-    form.append("Condition", "Good");
-    form.append("City", "Beirut");
-
-    const created = await API.post("/api/books", form);
-    console.log("4. POST /api/books AFTER refresh → success, listingId:", created?.listingId);
-} catch (e) {
-    console.log("4. POST after refresh FAILED:", e.status, e.message);
-}
-
-console.log("After all calls — document.cookie:", document.cookie);
-console.log("AccessToken still hidden:", !document.cookie.includes("accessToken"));
-console.log("===== END AUTH FLOW TEST =====");
-// ---------- END TEMPORARY ----------
-*/
   } catch (err) {
     if (err.status === 400 && err.body?.errors) {
       for (const [field, messages] of Object.entries(err.body.errors)) {
