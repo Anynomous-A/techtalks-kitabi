@@ -306,4 +306,12 @@
     } else {
         loadBook(listingId);
     }
+
+    // The profile is only for signed-in users.
+    if (!getUser()) {
+        window.location.replace("login.html");
+    } else {
+        loadProfile();
+        loadListings();
+    }
 })();
