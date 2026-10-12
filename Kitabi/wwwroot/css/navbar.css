@@ -1,0 +1,62 @@
+﻿/* navbar.css */
+.site-header {
+    background: #222;
+    color: #fff;
+    padding: 0.5rem 1rem;
+}
+
+.header-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main-nav {
+    display: none;
+    flex-direction: column;
+    background: #333;
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    width: 200px;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+    .main-nav a {
+        padding: 0.75rem;
+        color: #fff;
+        text-decoration: none;
+    }
+
+        .main-nav a:hover,
+        .main-nav a.active {
+            background: #0056b3; /* Kitabi blue accent */
+        }
+
+.nav-toggle {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* Desktop layout */
+@media (min-width: 768px) {
+    .nav-toggle {
+        display: none;
+    }
+
+    .main-nav {
+        display: flex !important;
+        flex-direction: row;
+        position: static;
+        background: none;
+        box-shadow: none;
+    }
+
+        .main-nav a {
+            padding: 0.5rem 1rem;
+        }
+}
