@@ -34,7 +34,7 @@ namespace Kitabi.Dtos.Book
         [property: StringLength(80, ErrorMessage = "City name must not exceed 80 characters")]
         string City,
 
-        [property: RegularExpression("^(Available|Removed)$", ErrorMessage = "Status must be: Available or Removed")]
+        [property: RegularExpression("^(Available|Sold)$", ErrorMessage = "Status must be: Available or Sold")]
         string? Status
     );
 }

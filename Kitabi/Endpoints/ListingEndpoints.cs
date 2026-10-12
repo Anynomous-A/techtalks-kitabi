@@ -2,13 +2,26 @@
 using Kitabi.Models;
 using Microsoft.EntityFrameworkCore;
 using Kitabi.DTOs;
+
 namespace Kitabi.Endpoints
 {
-
     public static class ListingEndpoints
     {
         public static void MapListingEndpoints(this WebApplication app)
         {
+            // Get single listing by ID
+            app.MapGet("/api/listings/{id}", async (int id, ApplicationDbContext db) =>
+            {
+                var listing = await db.Listings
+                    .Include(l => l.Book)
+                    .Include(l => l.Seller)
+                    .Include(l => l.Images)
+                    .FirstOrDefaultAsync(l => l.ListingId == id);
+
+                return listing is null ? Results.NotFound() : Results.Ok(listing);
+            });
+
+            // Search listings with filters, pagination, sorting
             app.MapGet("/api/listings/search", async (
                 ApplicationDbContext db,
                 string? title,
@@ -78,5 +91,4 @@ namespace Kitabi.Endpoints
             });
         }
     }
-
 }
