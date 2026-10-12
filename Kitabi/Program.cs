@@ -277,6 +277,7 @@ app.MapImageEndpoints();
 app.MapListingEndpoints();
 app.MapCommunicationEndpoints();
 app.MapAuthEndpoints();
+app.MapUserEndpoints();
 app.Use(async (context, next) =>
 {
     // Only sanitize JSON requests
