@@ -9,7 +9,7 @@ namespace Kitabi.Endpoints
     {
         public static void MapListingEndpoints(this WebApplication app)
         {
-            app.MapGet("/listings/search", async (
+            app.MapGet("/api/listings/search", async (
                 ApplicationDbContext db,
                 string? title,
                 string? author,
