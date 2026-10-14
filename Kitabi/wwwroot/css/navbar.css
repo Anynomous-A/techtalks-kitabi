@@ -23,16 +23,19 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
-    .main-nav a {
-        padding: 0.75rem;
-        color: #fff;
-        text-decoration: none;
-    }
+.main-nav a {
+    padding: 0.75rem;
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.2s ease; /* smooth hover effect */
+}
 
-        .main-nav a:hover,
-        .main-nav a.active {
-            background: #0056b3; /* Kitabi blue accent */
-        }
+/* Hover and active states: text turns blue */
+.main-nav a:hover,
+.main-nav a.active {
+    color: #007bff; /* Kitabi blue accent */
+    background: none; /* remove background box */
+}
 
 .nav-toggle {
     font-size: 1.5rem;
@@ -56,7 +59,19 @@
         box-shadow: none;
     }
 
-        .main-nav a {
-            padding: 0.5rem 1rem;
-        }
+
+.main-nav a {
+    display: block;          
+    padding: 0.75rem;        
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+
+.main-nav a:hover,
+.main-nav a.active {
+    color: #007bff;
+    background: none;        
+}
 }

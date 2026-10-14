@@ -153,62 +153,64 @@ form.addEventListener("submit", async (e) => {
     btn.textContent = "Posting...";
 
     try {
-        await API.post("/api/books", clean);
-        redirecting = true;
-        try { sessionStorage.setItem("flash", "Book posted successfully!"); } catch {}
-        window.location.replace(REDIRECT_URL);
+    const res = await API.post("/api/books", clean);
+
+    // If API.post returns a fetch Response, parse JSON:
+    const data = typeof res.json === "function" ? await res.json() : res;
+    const { listingId } = data;
+
+    redirecting = true;
+    try { sessionStorage.setItem("flash", "Book posted successfully!"); } catch {}
+
+    // Redirect to the new listing page
+    window.location.replace(`book.html?id=${listingId}`);
+    return;
+
+} catch (err) {
+    console.error("Post book failed:", err, err.body);
+
+    if (err.status === 401) {
+        showAlert("Please log in to post a book.", "error");
         return;
-
-    } catch (err) {
-        console.error("Post book failed:", err, err.body);
-
-        if (err.status === 401) {
-            showAlert("Please log in to post a book.", "error");
-            return;
-        }
-
-        if (err.status === 400 && err.body?.errors) {
-            const unmatched = [];
-
-            for (const [key, messages] of Object.entries(err.body.errors)) {
-                const msg = Array.isArray(messages) ? messages.join(" ") : String(messages);
-                const field = resolveFieldName(key);
-
-                if (field) {
-                    setFieldError(field, msg);
-                } else {
-                    unmatched.push(msg);
-                }
-            }
-
-            showAlert(
-                unmatched.length ? unmatched.join(" ") : "Please fix the errors below.",
-                "error"
-            );
-            return;
-        }
-
-        if (err.status === 400) {
-            showAlert(err.body?.error || err.body?.title || "Invalid input.", "error");
-            return;
-        }
-
-        if (err.status === 413) {
-            showAlert("Files are too large. Try fewer or smaller images.", "error");
-            return;
-        }
-
-        if (err instanceof TypeError) {
-            showAlert("Can't reach the server. Is the API running on localhost:5042?", "error");
-            return;
-        }
-
-        showAlert(err.message || "Something went wrong.", "error");
-
-    } finally {
-        if (!redirecting) {
-            btn.disabled = false;
-            btn.textContent = "Post Book";
-        }
     }
+
+    if (err.status === 400 && err.body?.errors) {
+        const unmatched = [];
+        for (const [key, messages] of Object.entries(err.body.errors)) {
+            const msg = Array.isArray(messages) ? messages.join(" ") : String(messages);
+            const field = resolveFieldName(key);
+            if (field) {
+                setFieldError(field, msg);
+            } else {
+                unmatched.push(msg);
+            }
+        }
+        showAlert(unmatched.length ? unmatched.join(" ") : "Please fix the errors below.", "error");
+        return;
+    }
+
+    if (err.status === 400) {
+        showAlert(err.body?.error || err.body?.title || "Invalid input.", "error");
+        return;
+    }
+
+    if (err.status === 413) {
+        showAlert("Files are too large. Try fewer or smaller images.", "error");
+        return;
+    }
+
+    if (err instanceof TypeError) {
+        showAlert("Can't reach the server. Is the API running on localhost:5042?", "error");
+        return;
+    }
+
+    showAlert(err.message || "Something went wrong.", "error");
+
+} finally {
+    if (!redirecting) {
+        btn.disabled = false;
+        btn.textContent = "Post Book";
+    }
+}
+
 });
