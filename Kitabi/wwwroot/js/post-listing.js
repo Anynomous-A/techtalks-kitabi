@@ -154,10 +154,8 @@ form.addEventListener("submit", async (e) => {
 
     try {
     const res = await API.post("/api/books", clean);
-
-    // If API.post returns a fetch Response, parse JSON:
-    const data = typeof res.json === "function" ? await res.json() : res;
-    const { listingId } = data;
+    const data = await res.json();       // parse response body
+    const { listingId } = data;          // extract the new listingId
 
     redirecting = true;
     try { sessionStorage.setItem("flash", "Book posted successfully!"); } catch {}
