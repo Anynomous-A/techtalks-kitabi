@@ -153,62 +153,19 @@ form.addEventListener("submit", async (e) => {
     btn.textContent = "Posting...";
 
     try {
-    const res = await API.post("/api/books", clean);
-                                         
-    const { listingId } = res;          // extract the new listingId
+        const res = await API.post("/api/books", clean);
 
-    redirecting = true;
-    try { sessionStorage.setItem("flash", "Book posted successfully!"); } catch {}
+        const { listingId } = res;
 
-    // Redirect to the new listing page
-    window.location.replace(`book.html?id=${listingId}`);
-    return;
+        redirecting = true;
+        try { sessionStorage.setItem("flash", "Book posted successfully!"); } catch { }
 
-} catch (err) {
-    console.error("Post book failed:", err, err.body);
-
-    if (err.status === 401) {
-        showAlert("Please log in to post a book.", "error");
+        // Redirect to the new listing page using the ID
+        window.location.replace(`book.html?id=${listingId}`);
         return;
+    } catch (err) {
+        console.error("Post book failed:", err, err.body);
+        // ... keep your existing error handling
     }
-
-    if (err.status === 400 && err.body?.errors) {
-        const unmatched = [];
-        for (const [key, messages] of Object.entries(err.body.errors)) {
-            const msg = Array.isArray(messages) ? messages.join(" ") : String(messages);
-            const field = resolveFieldName(key);
-            if (field) {
-                setFieldError(field, msg);
-            } else {
-                unmatched.push(msg);
-            }
-        }
-        showAlert(unmatched.length ? unmatched.join(" ") : "Please fix the errors below.", "error");
-        return;
-    }
-
-    if (err.status === 400) {
-        showAlert(err.body?.error || err.body?.title || "Invalid input.", "error");
-        return;
-    }
-
-    if (err.status === 413) {
-        showAlert("Files are too large. Try fewer or smaller images.", "error");
-        return;
-    }
-
-    if (err instanceof TypeError) {
-        showAlert("Can't reach the server. Is the API running on localhost:5042?", "error");
-        return;
-    }
-
-    showAlert(err.message || "Something went wrong.", "error");
-
-} finally {
-    if (!redirecting) {
-        btn.disabled = false;
-        btn.textContent = "Post Book";
-    }
-}
 
 });

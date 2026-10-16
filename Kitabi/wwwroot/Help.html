@@ -84,7 +84,58 @@
             <p>Email us at <a href="mailto:support@kitabi.com">support@kitabi.com</a>.</p>
         </section>
     </main>
-</body>
-</html>
+    <script src="js/api.js"></script>
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+          "use strict";
+
+          function getUser() {
+            try {
+              const u = JSON.parse(localStorage.getItem("user") || "null");
+              return u && Object.keys(u).length ? u : null;
+            } catch { return null; }
+          }
+
+          const user = getUser();
+
+          const loginLink   = document.getElementById("loginLink");
+          const logoutBtn   = document.getElementById("logoutBtn");
+          const profileLink = document.getElementById("profileLink");
+          const sellLink    = document.getElementById("sellLink");
+
+          if (loginLink) loginLink.hidden = !!user;
+          if (logoutBtn) logoutBtn.hidden = !user;
+
+          if (profileLink && user) {
+            profileLink.title = user.name || "Account";
+            profileLink.setAttribute("aria-label", "Account: " + (user.name || ""));
+          }
+
+          if (logoutBtn) {
+            logoutBtn.addEventListener("click", async () => {
+              logoutBtn.disabled = true;
+              try {
+                await API.post("/api/auth/logout", { refreshToken: "" });
+              } catch (err) {
+                console.error("Logout failed:", err);
+              } finally {
+                localStorage.removeItem("user");
+                window.location.href = "index.html";
+              }
+            });
+          }
+
+          if (sellLink) {
+            sellLink.addEventListener("click", (e) => {
+              if (!getUser()) {
+                e.preventDefault();
+                window.location.href = "login.html";
+              }
+            });
+          }
+});
+    </script>
+
+
 </body>
 </html>
