@@ -154,8 +154,8 @@ form.addEventListener("submit", async (e) => {
 
     try {
     const res = await API.post("/api/books", clean);
-    const data = await res.json();       // parse response body
-    const { listingId } = data;          // extract the new listingId
+                                         
+    const { listingId } = res;          // extract the new listingId
 
     redirecting = true;
     try { sessionStorage.setItem("flash", "Book posted successfully!"); } catch {}
