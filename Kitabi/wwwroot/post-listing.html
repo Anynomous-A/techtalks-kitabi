@@ -16,7 +16,6 @@
     <div class="container nav">
         <a class="logo" href="index.html"><img src="images/logo.png" alt="Kitabi"></a>
         <nav class="nav-links">
-            <a href="index.html">Home</a>
             <a href="post-listing.html" class="active">Sell</a>
         </nav>
         <div class="nav-actions">
@@ -132,16 +131,12 @@
             <img src="images/logo.png" alt="Kitabi">
             <small>Buy • Sell • Share Books</small>
         </div>
-        <div class="foot-links">
-            <a href="index.html">Home</a>
-            <a href="post-listing.html">Sell a book</a>
-        </div>
+        <small class="foot-copy">© <span id="year">2026</span> Kitabi. All rights reserved.</small>
     </div>
 </footer>
 
 <script src="js/api.js"></script>
 <script src="js/post-listing.js"></script>
-
 
 <script>
 (function () {
@@ -228,6 +223,9 @@
     });
 
     render();
+
+    const yearEl = document.getElementById("year");
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
 })();
 </script>
 </body>
