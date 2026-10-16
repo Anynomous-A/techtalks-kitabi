@@ -21,6 +21,7 @@ namespace Kitabi.Endpoints
                 return listing is null ? Results.NotFound() : Results.Ok(listing);
             });
 
+
             // Search listings with filters, pagination, sorting
             app.MapGet("/api/listings/search", async (
                 ApplicationDbContext db,
@@ -89,6 +90,8 @@ namespace Kitabi.Endpoints
 
                 return Results.Ok(results);
             });
+            // Create a new listing
+         
         }
     }
 }

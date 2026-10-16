@@ -153,7 +153,13 @@ form.addEventListener("submit", async (e) => {
     btn.textContent = "Posting...";
 
     try {
+<<<<<<< HEAD
         const res = await API.post("/api/books", clean);
+=======
+    const res = await API.post("/api/books", clean);
+                                         
+    const { listingId } = res;          // extract the new listingId
+>>>>>>> 11d638defec48e73b78d38afaa05f7339e057ad8
 
         const { listingId } = res;
 
