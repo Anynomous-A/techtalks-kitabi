@@ -334,3 +334,66 @@ h1 {
         padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
     }
 }
+/* ---------- Show / hide password ---------- */
+.password-wrap {
+    position: relative;
+}
+
+.password-wrap input {
+    padding-right: 2.75rem;
+}
+
+/* Edge draws its own reveal icon; hide it so there is only one eye */
+.password-wrap input::-ms-reveal {
+    display: none;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: none;
+    border: 0;
+    color: var(--muted);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.toggle-password:hover {
+    color: var(--navy);
+}
+
+.toggle-password:focus-visible {
+    outline: 0;
+    color: var(--blue-700);
+    box-shadow: 0 0 0 3px rgba(78, 167, 240, .5);
+    border-radius: var(--radius-input);
+}
+
+.toggle-password svg {
+    width: 20px;
+    height: 20px;
+}
+/* Default state: Password is hidden (input.type is "password"), show the crossed-out eye */
+.toggle-password .eye-open {
+  display: none;
+}
+
+.toggle-password .eye-off {
+  display: block;
+}
+
+/* When .is-visible is added: Password is shown (input.type is "text"), show the open eye */
+.toggle-password.is-visible .eye-open {
+  display: block;
+}
+
+.toggle-password.is-visible .eye-off {
+  display: none;
+}
