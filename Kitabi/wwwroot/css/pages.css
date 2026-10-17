@@ -1,0 +1,384 @@
+/* ============================================================
+   Kitabi — Shared static page styles
+   Used by: about.html, how-it-works.html, faq.html, contact.html
+   Loaded AFTER home.css (which provides header, footer,
+   buttons, chips, badges, colour tokens, and the hamburger).
+   ============================================================ */
+
+/* ---------- Page shell ---------- */
+.page { padding-bottom: 64px; }
+
+/* ---------- Page hero (title area) ---------- */
+.page-hero {
+    background: linear-gradient(135deg, var(--soft) 0%, var(--soft-2) 100%);
+    border: 1px solid var(--soft-2);
+    border-radius: 16px;
+    padding: 44px 40px;
+    margin-top: 20px;
+    text-align: center;
+}
+.page-hero h1 {
+    font-size: clamp(28px, 4.5vw, 40px);
+    font-weight: 800;
+    letter-spacing: -.03em;
+    line-height: 1.15;
+    color: var(--navy);
+}
+.page-hero p {
+    margin: 12px auto 0;
+    max-width: 620px;
+    font-size: 1.05rem;
+    color: var(--navy-2);
+}
+
+/* ---------- Section wrapper ---------- */
+.section {
+    padding: 44px 0 0;
+}
+.section h2 {
+    font-size: clamp(22px, 3vw, 28px);
+    font-weight: 700;
+    letter-spacing: -.02em;
+    color: var(--navy);
+    margin-bottom: 6px;
+}
+.section .section-sub {
+    color: var(--muted);
+    margin-bottom: 22px;
+}
+
+/* ---------- Cards grid ---------- */
+.card-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.card-box {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+.card-box:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--soft-2);
+}
+.card-box .icon {
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 14px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-700) 100%);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(31, 120, 204, .3);
+}
+.card-box h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    margin-bottom: 6px;
+}
+.card-box p {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+/* ---------- Content panel (long text) ---------- */
+.panel {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 28px;
+}
+.panel + .panel { margin-top: 20px; }
+
+.panel h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -.01em;
+}
+.panel h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 18px 0 6px;
+    color: var(--navy);
+}
+.panel p {
+    color: var(--navy-2);
+    font-size: 0.98rem;
+    line-height: 1.7;
+}
+.panel p + p { margin-top: 10px; }
+.panel ul {
+    padding-left: 1.25rem;
+    margin: 10px 0;
+}
+.panel ul li {
+    margin-bottom: 6px;
+    color: var(--navy-2);
+    line-height: 1.7;
+}
+.panel ul li strong { color: var(--navy); }
+
+/* ---------- Steps (how-it-works) ---------- */
+.steps {
+    display: grid;
+    gap: 20px;
+    counter-reset: step;
+}
+.step {
+    position: relative;
+    padding: 24px 24px 24px 76px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    transition: transform .2s, box-shadow .2s;
+}
+.step:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+.step::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-700) 100%);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(31, 120, 204, .3);
+}
+.step h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--navy);
+}
+.step p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.65;
+}
+
+/* ---------- FAQ accordion ---------- */
+.faq-list {
+    display: grid;
+    gap: 12px;
+    max-width: 780px;
+    margin: 0 auto;
+}
+.faq-item {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    transition: background .2s, border-color .2s, box-shadow .2s;
+}
+.faq-item[open] {
+    background: var(--soft);
+    border-color: var(--blue);
+    box-shadow: var(--shadow-lg);
+}
+.faq-item summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--navy);
+    transition: color .2s;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+    content: "+";
+    margin-left: auto;
+    width: 26px;
+    height: 26px;
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--blue-700);
+    background: var(--soft-2);
+    border-radius: 50%;
+    transition: transform .2s, background .2s, color .2s;
+}
+.faq-item[open] summary::after {
+    content: "−";
+    transform: rotate(180deg);
+    background: var(--blue-600);
+    color: #fff;
+}
+.faq-item summary:hover { color: var(--blue-700); }
+.faq-item .answer {
+    padding: 0 20px 18px;
+    color: var(--navy-2);
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+/* ---------- Contact page (simple email card) ---------- */
+.contact-simple {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 48px 32px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.contact-simple .mail-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 18px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-700) 100%);
+    border-radius: 14px;
+    box-shadow: 0 6px 16px rgba(31, 120, 204, .35);
+}
+
+.contact-simple h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    margin-bottom: 6px;
+    color: var(--navy);
+}
+
+.contact-simple p {
+    font-size: 0.95rem;
+    margin-bottom: 22px;
+}
+
+.contact-simple .mail-link {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--blue-700);
+    background: var(--soft);
+    border: 1px solid var(--soft-2);
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background .2s, border-color .2s, transform .1s;
+    word-break: break-all;
+}
+
+.contact-simple .mail-link:hover {
+    background: var(--soft-2);
+    border-color: var(--blue);
+    transform: translateY(-1px);
+    text-decoration: none;
+}
+
+.contact-simple .mail-link:active {
+    transform: translateY(0);
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+@media (max-width: 720px) {
+    .page-hero {
+        padding: 32px 20px;
+        border-radius: 14px;
+    }
+    .page-hero p { font-size: 1rem; }
+
+    .section { padding: 32px 0 0; }
+
+    .panel { padding: 22px 18px; }
+
+    .step {
+        padding: 20px 20px 20px 68px;
+    }
+    .step::before {
+        top: 20px;
+        left: 20px;
+        width: 32px;
+        height: 32px;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 560px) {
+    .contact-simple {
+        padding: 36px 22px;
+        border-radius: 14px;
+    }
+    .contact-simple .mail-icon {
+        width: 52px;
+        height: 52px;
+    }
+    .contact-simple h2 { font-size: 1.2rem; }
+    .contact-simple .mail-link {
+        padding: 10px 18px;
+        font-size: 0.92rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-hero { padding: 28px 16px; }
+    .page-hero h1 { font-size: 26px; }
+
+    .section h2 { font-size: 20px; }
+
+    .card-box { padding: 20px; }
+    .card-box h3 { font-size: 1rem; }
+
+    .faq-item summary {
+        padding: 14px 16px;
+        font-size: 0.95rem;
+    }
+    .faq-item .answer { padding: 0 16px 16px; }
+
+    .step { padding: 18px 16px 18px 64px; }
+    .step::before {
+        top: 18px;
+        left: 16px;
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media (max-width: 380px) {
+    .contact-simple {
+        padding: 28px 16px;
+    }
+    .contact-simple .mail-link {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}

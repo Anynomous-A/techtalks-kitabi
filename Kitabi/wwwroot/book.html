@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-        <link rel="stylesheet" href="css/navbar.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="See book details and contact the seller on Kitabi." />
     <title>Book details — Kitabi</title>
@@ -10,16 +9,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- home.css: shared header, footer, buttons, badges, tokens, hamburger -->
+    <link rel="stylesheet" href="css/home.css" />
+    <!-- book.css: only the book-detail-page-specific styles -->
     <link rel="stylesheet" href="css/book.css" />
 </head>
 <body>
+
     <header class="site-header">
         <div class="container header-inner">
             <a class="brand" href="index.html" aria-label="Kitabi home">
                 <img src="uploads/logo.png" alt="Kitabi" />
             </a>
 
-            <!-- Hamburger toggle -->
             <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
 
             <nav class="main-nav" aria-label="Main">
@@ -124,7 +127,7 @@
     <footer class="site-footer">
         <div class="container footer-inner">
             <div class="footer-brand">
-                <img src="Images/logo.png" alt="Kitabi" />
+                <img src="uploads/logo.png" alt="Kitabi" />
                 <p>Buy • Sell • Share Books</p>
             </div>
             <nav class="footer-links" aria-label="Footer">
@@ -142,6 +145,7 @@
     <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
 
     <script src="js/api.js"></script>
+    <script src="js/navbar.js"></script>
     <script src="js/book.js"></script>
 </body>
 </html>
