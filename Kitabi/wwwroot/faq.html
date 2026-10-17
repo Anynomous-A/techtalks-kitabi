@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQ — Kitabi</title>
+    <meta name="description" content="Frequently asked questions about buying and selling books on Kitabi." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+    <!-- ===== Header ===== -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="index.html" aria-label="Kitabi home">
+                <img src="uploads/logo.png" alt="Kitabi" />
+            </a>
+            <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+            <nav class="main-nav" aria-label="Main">
+                <a href="index.html">Home</a>
+                <a href="index.html#books">Browse Books</a>
+                <a href="post-listing.html" id="sellLink">Sell a Book</a>
+                <a href="Help.html">Help</a>
+            </nav>
+            <div class="header-actions">
+                <a href="login.html" id="loginLink" class="header-link"><span>Login</span></a>
+                <button type="button" id="logoutBtn" class="header-link" hidden><span>Logout</span></button>
+                <a href="profile.html" id="profileLink" class="icon-btn" aria-label="Account"><span>Profile</span></a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container page">
+
+        <section class="page-hero">
+            <h1>Frequently Asked Questions</h1>
+            <p>Quick answers to the things people ask us most.</p>
+        </section>
+
+        <section class="section">
+            <div class="faq-list">
+
+                <details class="faq-item" open>
+                    <summary>Is Kitabi free to use?</summary>
+                    <div class="answer">Yes. Listing a book is completely free, and buyers pay nothing to browse or contact sellers. We don't take a cut from either side.</div>
+                </details>
+
+                <details class="faq-item">
+                    <summary>How do I create an account?</summary>
+                    <div class="answer">Click <strong>Login</strong> in the top right, then choose <strong>Register</strong>. You'll need a name, email, phone number and university. It takes less than a minute.</div>
+                </details>
+
+                <details class="faq-item">
+                    <summary>Can I edit or delete a listing?</summary>
+                    <div class="answer">Yes. Go to your <strong>Profile</strong> → <strong>My Listings</strong> and use the <strong>Edit</strong> or <strong>Delete</strong> buttons on any book. You can also mark it as <strong>Sold</strong> once it's gone.</div>
+                </details>
+
+                <details class="faq-item">
+                    <summary>How do I contact a seller?</summary>
+                    <div class="answer">Open any listing and you'll see the seller's phone number and university. You need to be logged in to view contact details.</div>
+                </details>
+
+                <details class="faq-item">
+                    <summary>What payment methods should I use?</summary>
+                    <div class="answer">Cash is safest — pay in person when you meet the seller. If you use a digital transfer, only do it after you've inspected the book and trust the person.</div>
+                </details>
+
+                <details class="faq-item">
+                    <summary>What if a listing looks suspicious?</summary>
+                    <div class="answer">Don't engage with it. Email us at <a href="mailto:support@kitabi.com">support@kitabi.com</a> with the listing link, and we'll review it.</div>
+                </details>
+
+                <details class="faq-item">
+                    <summary>I forgot my password. What now?</summary>
+                    <div class="answer">On the login page, click <strong>Forgot password</strong> and follow the instructions. If you don't receive a reset email, contact support.</div>
+                </details>
+
+                <details class="faq-item">
+                    <summary>Can I sell books that aren't for university?</summary>
+                    <div class="answer">Absolutely. As long as it's a real book in the condition you describe, you can list anything — school books, novels, reference guides, anything readable.</div>
+                </details>
+
+                <details class="faq-item">
+                    <summary>How many photos can I upload?</summary>
+                    <div class="answer">Up to 10 photos per listing. JPG, PNG or GIF, up to 5 MB each. Photos of the actual book (not stock images) get the best results.</div>
+                </details>
+
+                <details class="faq-item">
+                    <summary>Do you deliver books?</summary>
+                    <div class="answer">No — Kitabi is a local marketplace. Buyers and sellers arrange their own meetup, usually on campus or in a nearby public place.</div>
+                </details>
+
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="panel">
+                <h2>Still have a question?</h2>
+                <p>We're happy to help. Reach out on the <a href="contact.html">contact page</a>, or email us directly at <a href="mailto:support@kitabi.com">support@kitabi.com</a>.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===== Footer ===== -->
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="footer-brand">
+                <img src="uploads/logo.png" alt="Kitabi" />
+                <p>Buy • Sell • Share Books</p>
+            </div>
+            <nav class="footer-links" aria-label="Footer">
+                <a href="about.html">About</a>
+                <a href="how-it-works.html">How it works</a>
+                <a href="faq.html">FAQ</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+            <div class="footer-side">
+                <small>© <span id="year">2026</span> Kitabi. All rights reserved.</small>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/navbar.js"></script>
+</body>
+</html>

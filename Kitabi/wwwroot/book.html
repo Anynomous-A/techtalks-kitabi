@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="See book details and contact the seller on Kitabi." />
+    <title>Book details — Kitabi</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- home.css: shared header, footer, buttons, badges, tokens, hamburger -->
+    <link rel="stylesheet" href="css/home.css" />
+    <!-- book.css: only the book-detail-page-specific styles -->
+    <link rel="stylesheet" href="css/book.css" />
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="index.html" aria-label="Kitabi home">
+                <img src="uploads/logo.png" alt="Kitabi" />
+            </a>
+
+            <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+
+            <nav class="main-nav" aria-label="Main">
+                <a href="index.html">Home</a>
+                <a href="post-listing.html" id="sellLink">Sell a Book</a>
+                <a href="Help.html">Help</a>
+            </nav>
+
+            <div class="header-actions">
+                <a href="login.html" id="loginLink" class="header-link">
+                    <span>Login</span>
+                </a>
+                <button type="button" id="logoutBtn" class="header-link" hidden>
+                    <span>Logout</span>
+                </button>
+                <a href="profile.html" id="profileLink" class="icon-btn" aria-label="Account">
+                    <span>Profile</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container page-main">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <a href="index.html">Home</a>
+            <span aria-hidden="true">/</span>
+            <a href="index.html#books">Browse books</a>
+            <span aria-hidden="true">/</span>
+            <span id="crumbTitle" class="breadcrumb-current">Book details</span>
+        </nav>
+
+        <div id="pageStatus" class="page-status" role="status" aria-live="polite">
+            <span class="loading-spinner" aria-hidden="true"></span>
+            <strong>Loading book details…</strong>
+        </div>
+
+        <section id="bookDetail" class="detail-layout" aria-labelledby="bookTitle" hidden>
+            <div class="gallery">
+                <div id="mainImage" class="main-image" aria-label="Book cover"></div>
+                <div id="imageThumbs" class="image-thumbs" aria-label="More book photos" hidden></div>
+            </div>
+
+            <div class="detail-column">
+                <div class="book-heading">
+                    <p id="bookCategory" class="eyebrow"></p>
+                    <h1 id="bookTitle"></h1>
+                    <p id="bookAuthor" class="author-line"></p>
+                    <div class="badges">
+                        <span id="bookCondition" class="badge"></span>
+                        <span id="bookStatus" class="badge status-badge"></span>
+                    </div>
+                </div>
+
+                <section class="price-panel" aria-label="Price and seller contact">
+                    <div>
+                        <span class="price-label">Asking price</span>
+                        <p id="bookPrice" class="price"></p>
+                    </div>
+                    <span class="price-note">Contact the seller to arrange the exchange.</span>
+                </section>
+
+                <dl class="book-facts">
+                    <div class="fact">
+                        <dt>Location</dt>
+                        <dd id="bookCity"></dd>
+                    </div>
+                    <div class="fact">
+                        <dt>Category</dt>
+                        <dd id="factCategory"></dd>
+                    </div>
+                    <div class="fact" id="isbnFact">
+                        <dt>ISBN</dt>
+                        <dd id="bookIsbn"></dd>
+                    </div>
+                </dl>
+
+                <section class="description-section">
+                    <h2>About this book</h2>
+                    <p id="bookDescription"></p>
+                </section>
+
+                <section class="seller-card" aria-labelledby="sellerHeading">
+                    <div id="sellerAvatar" class="seller-avatar" aria-hidden="true"></div>
+                    <div class="seller-copy">
+                        <h2 id="sellerHeading">Seller</h2>
+                        <p id="sellerName" class="seller-name"></p>
+                        <p id="sellerUniversity" class="seller-university"></p>
+                    </div>
+                </section>
+
+                <div class="detail-actions">
+                    <button type="button" id="contactBtn" class="btn btn-primary">
+                        Contact seller
+                    </button>
+                    <a class="btn btn-outline" href="index.html#books">Back to books</a>
+                </div>
+                <p id="contactHint" class="contact-hint"></p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="footer-brand">
+                <img src="uploads/logo.png" alt="Kitabi" />
+                <p>Buy • Sell • Share Books</p>
+            </div>
+            <nav class="footer-links" aria-label="Footer">
+                <a href="about.html">About</a>
+                <a href="how-it-works.html">How it works</a>
+                <a href="faq.html">FAQ</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+            <div class="footer-side">
+                <small>© <span id="year"></span> Kitabi. All rights reserved.</small>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
+
+    <script src="js/api.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src="js/book.js"></script>
+</body>
+</html>

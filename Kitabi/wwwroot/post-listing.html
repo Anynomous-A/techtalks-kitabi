@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Post a Book — Kitabi</title>
+    <link rel="icon" href="images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/post-listing.css">
+</head>
+<body>
+
+<header class="site-header">
+    <div class="container nav">
+        <a class="logo" href="index.html"><img src="images/logo.png" alt="Kitabi"></a>
+        <nav class="nav-links">
+            <a href="post-listing.html" class="active">Sell</a>
+        </nav>
+        <div class="nav-actions">
+            <a class="btn btn-outline btn-sm" href="index.html">← Back to home</a>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    <div class="page-head">
+        <h1>Post a Book</h1>
+        <p class="muted">Fill in the details below to list your book for sale. Fields marked * are required.</p>
+    </div>
+
+    <div class="sell-layout">
+
+        <form id="postForm" class="card form-card" enctype="multipart/form-data" novalidate>
+
+            <div class="field">
+                <label for="Title">Title *</label>
+                <input id="Title" name="Title" type="text" required minlength="2" maxlength="100" placeholder="e.g. Clean Code">
+                <div class="field-error" data-error-for="Title"></div>
+            </div>
+
+            <div class="field">
+                <label for="Author">Author</label>
+                <input id="Author" name="Author" type="text" maxlength="100" placeholder="e.g. Robert C. Martin">
+                <div class="field-error" data-error-for="Author"></div>
+            </div>
+
+            <div class="two">
+                <div class="field">
+                    <label for="Category">Category *</label>
+                    <input id="Category" name="Category" type="text" required maxlength="60" list="categoryList" placeholder="e.g. Computer Science">
+                    <datalist id="categoryList">
+                        <option value="Computer Science">
+                        <option value="Business">
+                        <option value="Engineering">
+                        <option value="Mathematics">
+                        <option value="Science">
+                        <option value="Languages">
+                        <option value="Other">
+                    </datalist>
+                    <div class="field-error" data-error-for="Category"></div>
+                </div>
+
+                <div class="field">
+                    <label for="Isbn">ISBN</label>
+                    <input id="Isbn" name="Isbn" type="text" maxlength="20" placeholder="10 or 13 digits">
+                    <div class="field-error" data-error-for="Isbn"></div>
+                </div>
+
+                <div class="field">
+                    <label for="Condition">Condition *</label>
+                    <select id="Condition" name="Condition" required>
+                        <option value="">Select condition</option>
+                        <option value="New">New</option>
+                        <option value="Good">Good</option>
+                        <option value="Fair">Fair</option>
+                        <option value="Poor">Poor</option>
+                    </select>
+                    <div class="field-error" data-error-for="Condition"></div>
+                </div>
+
+                <div class="field">
+                    <label for="Price">Price *</label>
+                    <input id="Price" name="Price" type="number" step="0.01" min="0.01" required placeholder="e.g. 15">
+                    <div class="field-error" data-error-for="Price"></div>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="City">City *</label>
+                <input id="City" name="City" type="text" required maxlength="80" placeholder="e.g. Beirut">
+                <div class="field-error" data-error-for="City"></div>
+            </div>
+
+            <div class="field">
+                <label for="Description">Description *</label>
+                <textarea id="Description" name="Description" required maxlength="1000"
+                          placeholder="Describe the book, its condition and any other useful details..."></textarea>
+                <div class="field-error" data-error-for="Description"></div>
+            </div>
+
+            <div class="field">
+                <label for="Images">Add Photos</label>
+                <label class="drop" id="drop" for="Images">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+                    <strong>Choose Images</strong>
+                    <small>or drag and drop • JPG, PNG, GIF • up to 10 images, 5MB each</small>
+                </label>
+                <input id="Images" name="Images" type="file" accept="image/jpeg,image/png,image/gif" multiple hidden>
+                <div class="field-error" data-error-for="Images"></div>
+                <div id="imagePreview" class="previews"></div>
+            </div>
+
+            <div id="formMsg" class="alert" role="alert"></div>
+
+            <button type="submit" id="submitBtn" class="btn btn-primary btn-block">Post Book</button>
+        </form>
+
+        <aside class="card preview">
+            <h2>Live Preview</h2>
+            <div id="previewCard"></div>
+        </aside>
+
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="container foot">
+        <div class="foot-brand">
+            <img src="images/logo.png" alt="Kitabi">
+            <small>Buy • Sell • Share Books</small>
+        </div>
+        <small class="foot-copy">© <span id="year">2026</span> Kitabi. All rights reserved.</small>
+    </div>
+</footer>
+
+<script src="js/api.js"></script>
+<script src="js/post-listing.js"></script>
+
+<script>
+(function () {
+    const $ = id => document.getElementById(id);
+    const card  = $("previewCard");
+    const drop  = $("drop");
+    const input = $("Images");
+    let coverUrl = null;
+
+    function render() {
+        const title  = $("Title").value.trim()  || "Book title";
+        const author = $("Author").value.trim() || "Author";
+        const cond   = $("Condition").value;
+        const city   = $("City").value.trim();
+        const price  = parseFloat($("Price").value);
+
+        if (coverUrl) { URL.revokeObjectURL(coverUrl); coverUrl = null; }
+        const first = input.files && input.files[0];
+        if (first && first.type.startsWith("image/")) coverUrl = URL.createObjectURL(first);
+
+        card.innerHTML = "";
+        const wrap = document.createElement("div");
+        wrap.className = "book-card";
+
+        const cover = document.createElement("div");
+        cover.className = "cover";
+        if (coverUrl) {
+            const img = document.createElement("img");
+            img.src = coverUrl; img.alt = "";
+            cover.appendChild(img);
+        } else {
+            const fb = document.createElement("div");
+            fb.className = "cover-fallback";
+            const b = document.createElement("b");
+            b.textContent = title;
+            fb.appendChild(b);
+            cover.appendChild(fb);
+        }
+
+        const info = document.createElement("div");
+        info.className = "info";
+
+        const h3 = document.createElement("h3");   h3.textContent = title;
+        const a  = document.createElement("div");  a.className = "author"; a.textContent = author;
+        info.append(h3, a);
+
+        if (cond) {
+            const badge = document.createElement("span");
+            badge.className = "badge " + cond.toLowerCase();
+            badge.textContent = cond;
+            info.appendChild(badge);
+        }
+        if (city) {
+            const m = document.createElement("div");
+            m.className = "meta"; m.textContent = city;
+            info.appendChild(m);
+        }
+        const p = document.createElement("div");
+        p.className = "price";
+        p.textContent = price > 0 ? "$" + price.toFixed(2) : "$0.00";
+        info.appendChild(p);
+
+        wrap.append(cover, info);
+        card.appendChild(wrap);
+    }
+
+    ["Title", "Author", "Condition", "City", "Price"].forEach(id => {
+        $(id).addEventListener("input", render);
+        $(id).addEventListener("change", render);
+    });
+    input.addEventListener("change", render);
+
+    ["dragenter", "dragover"].forEach(ev => drop.addEventListener(ev, e => {
+        e.preventDefault(); drop.classList.add("over");
+    }));
+    ["dragleave", "drop"].forEach(ev => drop.addEventListener(ev, e => {
+        e.preventDefault(); drop.classList.remove("over");
+    }));
+    drop.addEventListener("drop", e => {
+        if (e.dataTransfer && e.dataTransfer.files.length) {
+            input.files = e.dataTransfer.files;
+            input.dispatchEvent(new Event("change"));
+        }
+    });
+
+    render();
+
+    const yearEl = document.getElementById("year");
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>

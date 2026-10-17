@@ -1,8 +1,0 @@
-2026-09-27 13:07:10 [WRN] Failed to determine the https port for redirect.
-2026-09-27 13:07:12 [WRN] SECURITY_EVENT: FailedLogin | User=testuser1 | IP=::1 | Time="2026-09-27T10:07:12.1349576Z"
-2026-09-27 13:07:19 [WRN] SECURITY_EVENT: FailedLogin | User=testuser1 | IP=::1 | Time="2026-09-27T10:07:19.0516660Z"
-2026-09-27 13:07:24 [WRN] SECURITY_EVENT: FailedLogin | User=testuser1 | IP=::1 | Time="2026-09-27T10:07:24.4963474Z"
-2026-09-27 13:07:28 [WRN] SECURITY_EVENT: FailedLogin | User=testuser1 | IP=::1 | Time="2026-09-27T10:07:28.7599197Z"
-2026-09-27 13:07:34 [WRN] SECURITY_EVENT: FailedLogin | User=testuser1 | IP=::1 | Time="2026-09-27T10:07:34.8648355Z"
-2026-09-27 13:07:34 [WRN] SECURITY_EVENT: PossibleBruteForce | Details=5+ failed login attempts for user 'testuser1' | IP=::1 | Time="2026-09-27T10:07:34.8890518Z"
-2026-09-27 13:07:43 [WRN] SECURITY_EVENT: RateLimitExceeded | IP=::1 | Path=/api/auth/login | Method=POST

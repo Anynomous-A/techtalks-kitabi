@@ -1,0 +1,180 @@
+﻿/* ============================================================
+   Kitabi — Shared navbar styles
+   Used on pages that don't load home.css (login, register, etc.)
+   Matches the tokens & look of home.css
+   ============================================================ */
+
+:root {
+    --blue: #4EA7F0;
+    --blue-600: #2B8BE0;
+    --blue-700: #1F78CC;
+    --navy: #0A203A;
+    --navy-2: #123A6B;
+    --soft: #F3F8FE;
+    --soft-2: #E6F1FD;
+    --border: #DDE5EE;
+    --muted: #5B6B7F;
+    --shadow: 0 2px 10px rgba(10, 32, 58, .06);
+    --shadow-lg: 0 8px 24px rgba(10, 32, 58, .12);
+}
+
+/* ---------- Header shell ---------- */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(255, 255, 255, .94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    color: var(--navy);
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    min-height: 64px;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.brand img { height: 34px; width: auto; }
+
+/* ---------- Main nav ---------- */
+.main-nav {
+    display: flex;
+    gap: 26px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.main-nav a {
+    position: relative;
+    padding: 22px 0;
+    color: var(--navy);
+    text-decoration: none;
+    transition: color .2s;
+}
+
+/* ✅ SAME hover color for every link — no background box */
+.main-nav a:hover,
+.main-nav a.active {
+    color: var(--blue-700);
+    background: none;
+}
+
+.main-nav a.active::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: -1px;
+    height: 2px;
+    background: var(--blue-600);
+    border-radius: 2px;
+}
+
+/* ---------- Header actions ---------- */
+.header-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.header-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--navy);
+    background: none;
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color .2s, background .2s;
+}
+
+.header-link:hover {
+    color: var(--blue-700);
+    background: var(--soft);
+}
+
+.icon-btn {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    color: var(--navy);
+    border-radius: 50%;
+    text-decoration: none;
+    transition: background .2s, color .2s;
+}
+
+.icon-btn:hover {
+    background: var(--soft-2);
+    color: var(--blue-700);
+}
+
+/* ---------- Hamburger (hidden on desktop) ---------- */
+.nav-toggle {
+    display: none;
+    font-size: 1.4rem;
+    line-height: 1;
+    padding: 6px 10px;
+    background: none;
+    border: 0;
+    color: var(--navy);
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background .2s, color .2s;
+}
+
+.nav-toggle:hover {
+    background: var(--soft);
+    color: var(--blue-700);
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 720px) {
+    .header-inner { gap: 0 12px; }
+    .brand img { height: 30px; }
+    .header-actions { gap: 4px; }
+
+    .nav-toggle { display: inline-flex; }
+
+    .main-nav {
+        order: 3;
+        flex-basis: 100%;
+        flex-direction: column;
+        gap: 0;
+        margin: 0 -20px;
+        padding: 0 20px;
+        border-top: 1px solid var(--border);
+        background: #fff;
+        display: none;
+    }
+
+    .main-nav.open {
+        display: flex;
+    }
+
+    .main-nav a {
+        padding: 12px 0;
+    }
+
+    .main-nav a.active::after {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How it works — Kitabi</title>
+    <meta name="description" content="Step-by-step guide on how to buy and sell books on Kitabi." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+
+    <!-- ===== Header ===== -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="index.html" aria-label="Kitabi home">
+                <img src="uploads/logo.png" alt="Kitabi" />
+            </a>
+            <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+            <nav class="main-nav" aria-label="Main">
+                <a href="index.html">Home</a>
+                <a href="index.html#books">Browse Books</a>
+                <a href="post-listing.html" id="sellLink">Sell a Book</a>
+                <a href="Help.html">Help</a>
+            </nav>
+            <div class="header-actions">
+                <a href="login.html" id="loginLink" class="header-link"><span>Login</span></a>
+                <button type="button" id="logoutBtn" class="header-link" hidden><span>Logout</span></button>
+                <a href="profile.html" id="profileLink" class="icon-btn" aria-label="Account"><span>Profile</span></a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container page">
+
+        <section class="page-hero">
+            <h1>How Kitabi Works</h1>
+            <p>Two simple flows — one for buying, one for selling. No fees, no middlemen.</p>
+        </section>
+
+        <section class="section">
+            <h2>Buying a book</h2>
+            <p class="section-sub">Find what you need in a few clicks.</p>
+
+            <div class="steps">
+                <div class="step">
+                    <h3>Search or browse</h3>
+                    <p>Use the search bar to find books by title, author, or ISBN — or browse by category on the home page.</p>
+                </div>
+                <div class="step">
+                    <h3>Open a listing</h3>
+                    <p>Tap a book to see photos, condition, price, city and the seller's description.</p>
+                </div>
+                <div class="step">
+                    <h3>Contact the seller</h3>
+                    <p>Log in and reach out with the contact details shown on the listing. Agree on a place and price.</p>
+                </div>
+                <div class="step">
+                    <h3>Meet and collect</h3>
+                    <p>Meet in a public place on campus, check the book in person, and pay the seller directly.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Selling a book</h2>
+            <p class="section-sub">List in under a minute.</p>
+
+            <div class="steps">
+                <div class="step">
+                    <h3>Create your listing</h3>
+                    <p>Click <strong>Sell a Book</strong>, fill in the title, author, category, condition, price and city.</p>
+                </div>
+                <div class="step">
+                    <h3>Add photos</h3>
+                    <p>Upload up to 10 photos of the book (cover, spine, any damage). Listings with photos sell faster.</p>
+                </div>
+                <div class="step">
+                    <h3>Publish</h3>
+                    <p>Hit <strong>Post Book</strong>. Your listing appears on the home page and on your profile.</p>
+                </div>
+                <div class="step">
+                    <h3>Hand it over</h3>
+                    <p>When a buyer contacts you, arrange a meetup. Mark the listing as <strong>Sold</strong> once it's gone.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Safety tips</h2>
+            <p class="section-sub">Small habits that keep everyone safe.</p>
+
+            <div class="panel">
+                <ul>
+                    <li><strong>Meet in public</strong> — on campus, in a cafe, or anywhere with people around.</li>
+                    <li><strong>Check before you pay</strong> — flip through the book, confirm the edition, then pay.</li>
+                    <li><strong>Use cash</strong> — or an instant transfer you both trust. Avoid anything that feels off.</li>
+                    <li><strong>Report bad listings</strong> — if something looks wrong, email us at support@kitabi.com.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===== Footer ===== -->
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="footer-brand">
+                <img src="uploads/logo.png" alt="Kitabi" />
+                <p>Buy • Sell • Share Books</p>
+            </div>
+            <nav class="footer-links" aria-label="Footer">
+                <a href="about.html">About</a>
+                <a href="how-it-works.html">How it works</a>
+                <a href="faq.html">FAQ</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+            <div class="footer-side">
+                <small>© <span id="year">2026</span> Kitabi. All rights reserved.</small>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/navbar.js"></script>
+</body>
+</html>

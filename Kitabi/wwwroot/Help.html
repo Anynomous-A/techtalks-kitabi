@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kitabi — Buy, Sell &amp; Share Books</title>
+    <meta name="description" content="Buy and sell university and second-hand books and save money while giving books a second life." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/help.css" />
+    <link rel="stylesheet" href="css/home.css" />
+</head>
+<body>
+    <!-- ===== Header ===== -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="index.html" aria-label="Kitabi home">
+                <img src="uploads/logo.png" alt="Kitabi" />
+            </a>
+
+            <!-- Hamburger toggle -->
+            <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+
+            <nav class="main-nav" aria-label="Main">
+                <a href="index.html">Home</a>
+                <a href="post-listing.html" id="sellLink">Sell a Book</a>
+                <a href="Help.html">Help</a>
+            </nav>
+
+            <div class="header-actions">
+                <a href="login.html" id="loginLink" class="header-link">
+                    <span>Login</span>
+                </a>
+                <button type="button" id="logoutBtn" class="header-link" hidden>
+                    <span>Logout</span>
+                </button>
+                <a href="profile.html" id="profileLink" class="icon-btn" aria-label="Account">
+                    <span>Profile</span>
+                </a>
+            </div>
+        </div>
+    </header>
+    <section class="help-hero">
+        <h1>Kitabi Help Center</h1>
+        <p>Soft, simple guidance on how to use the site.</p>
+    </section>
+
+    <!-- Content -->
+    <main class="help-container">
+        <section class="help-section">
+            <h2>1. Getting Started</h2>
+            <p>Register or log in to your account.</p>
+            <p>Use the search bar to find books by title, author, or ISBN.</p>
+        </section>
+
+        <section class="help-section">
+            <h2>2. Navigation Guide</h2>
+            <ol>
+                <li><strong>Home:</strong> Overview and featured books.</li>
+                <li><strong>Browse Books:</strong> Search and filter listings.</li>
+                <li><strong>Sell a Book:</strong> Post your own listing.</li>
+                <li><strong>Profile:</strong> Manage your account and listings.</li>
+                <li><strong>Help:</strong> Access this guide anytime.</li>
+            </ol>
+        </section>
+
+        <section class="help-section">
+            <h2>3. FAQ</h2>
+            <details>
+                <summary>How do I reset my password?</summary>
+                <p>Click “Login” → “Forgot Password” and follow the instructions.</p>
+            </details>
+            <details>
+                <summary>Can I edit or delete my book listing?</summary>
+                <p>Yes, go to your Profile and select the listing you want to update or remove.</p>
+            </details>
+        </section>
+
+        <section class="help-section">
+            <h2>4. Contact Support</h2>
+            <p>Email us at <a href="mailto:support@kitabi.com">support@kitabi.com</a>.</p>
+        </section>
+    </main>
+    <script src="js/api.js"></script>
+     <script src="js/navbar.js"></script>
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+          "use strict";
+
+          function getUser() {
+            try {
+              const u = JSON.parse(localStorage.getItem("user") || "null");
+              return u && Object.keys(u).length ? u : null;
+            } catch { return null; }
+          }
+
+          const user = getUser();
+
+          const loginLink   = document.getElementById("loginLink");
+          const logoutBtn   = document.getElementById("logoutBtn");
+          const profileLink = document.getElementById("profileLink");
+          const sellLink    = document.getElementById("sellLink");
+
+          if (loginLink) loginLink.hidden = !!user;
+          if (logoutBtn) logoutBtn.hidden = !user;
+
+          if (profileLink && user) {
+            profileLink.title = user.name || "Account";
+            profileLink.setAttribute("aria-label", "Account: " + (user.name || ""));
+          }
+
+          if (logoutBtn) {
+            logoutBtn.addEventListener("click", async () => {
+              logoutBtn.disabled = true;
+              try {
+                await API.post("/api/auth/logout", { refreshToken: "" });
+              } catch (err) {
+                console.error("Logout failed:", err);
+              } finally {
+                localStorage.removeItem("user");
+                window.location.href = "index.html";
+              }
+            });
+          }
+
+          if (sellLink) {
+            sellLink.addEventListener("click", (e) => {
+              if (!getUser()) {
+                e.preventDefault();
+                window.location.href = "login.html";
+              }
+            });
+          }
+});
+    </script>
+
+
+</body>
+</html>
