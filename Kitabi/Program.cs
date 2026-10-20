@@ -26,7 +26,7 @@ builder.Services.AddSqlServer<ApplicationDbContext>(connectionString);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
-        policy.WithOrigins("https://localhost:7004/",
+        policy.WithOrigins("https://localhost:7004",
                 "http://localhost:5500",
                 "http://127.0.0.1:5500")
               .AllowAnyHeader()
@@ -105,6 +105,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.MigrateDb();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -167,7 +168,7 @@ using (var scope = app.Services.CreateScope())
             Price = 20,
             Condition = "Good",
             City = "Beirut",
-            Status = "Active",
+            Status = "Available",
             CreatedAt = DateTime.UtcNow,
             Book = new Book
             {
@@ -187,7 +188,7 @@ using (var scope = app.Services.CreateScope())
             Price = 25,
             Condition = "Like New",
             City = "Tripoli",
-            Status = "Active",
+            Status = "Available",
             CreatedAt = DateTime.UtcNow,
             Book = new Book
             {
@@ -207,7 +208,7 @@ using (var scope = app.Services.CreateScope())
             Price = 40,
             Condition = "Fair",
             City = "Saida",
-            Status = "Active",
+            Status = "Available",
             CreatedAt = DateTime.UtcNow,
             Book = new Book
             {
@@ -227,7 +228,7 @@ using (var scope = app.Services.CreateScope())
             Price = 35,
             Condition = "Excellent",
             City = "Tyre",
-            Status = "Active",
+            Status = "Available",
             CreatedAt = DateTime.UtcNow,
             Book = new Book
             {
@@ -271,7 +272,7 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 
-app.MigrateDb();
+
 app.MapBookEndpoints();
 app.MapImageEndpoints();
 app.MapListingEndpoints();

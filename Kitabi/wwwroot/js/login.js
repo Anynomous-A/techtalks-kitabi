@@ -99,3 +99,23 @@ form.addEventListener("submit", async (e) => {
     btn.textContent = "Login";
   }
 });
+document.querySelectorAll(".toggle-password").forEach((toggle) => {
+  toggle.addEventListener("click", () => {
+    const input = document.getElementById(toggle.dataset.target);
+    if (!input) return;
+
+    const isHidden = input.type === "password";
+
+    // Show the password when the eye is open.
+    input.type = isHidden ? "text" : "password";
+
+    // Open eye = visible password.
+    // Crossed-out eye = hidden password.
+    toggle.classList.toggle("is-visible", isHidden);
+    toggle.setAttribute("aria-pressed", String(isHidden));
+    toggle.setAttribute(
+      "aria-label",
+      isHidden ? "Hide password" : "Show password"
+    );
+  });
+});

@@ -54,18 +54,24 @@
                 </div>
 
                 <div class="field">
-                    <label for="password">Password</label>
-                    <input
-                        id="password"
-                        name="password"
-                        type="password"
-                        placeholder="Create a password"
-                        required
-                        minlength="6"
-                        maxlength="100"
-                        autocomplete="new-password"
-                    />
-                    <div class="field-error" data-error-for="password"></div>
+<div class="password-wrap">
+    <input
+        id="password"
+        name="password"
+        type="password"
+        placeholder="Create a password"
+        required
+        minlength="6"
+        maxlength="100"
+        autocomplete="new-password"
+    />
+    <button type="button" class="toggle-password" data-target="password" aria-label="Show password" aria-pressed="false">
+        <svg class="eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+        <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.9 10.9 0 0 1 12 19C5 19 1 12 1 12a18.5 18.5 0 0 1 5.06-5.94M9.9 4.24A9.1 9.1 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19M14.12 14.12a3 3 0 1 1-4.24-4.24"/><path d="M1 1l22 22"/></svg>
+    </button>
+</div>
+<div class="field-error" data-error-for="password"></div>
+
                 </div>
 
                 <div class="field">

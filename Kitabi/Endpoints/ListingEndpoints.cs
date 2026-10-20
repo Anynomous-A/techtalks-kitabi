@@ -13,13 +13,25 @@ namespace Kitabi.Endpoints
             app.MapGet("/api/listings/{id}", async (int id, ApplicationDbContext db) =>
             {
                 var listing = await db.Listings
-                    .Include(l => l.Book)
-                    .Include(l => l.Seller)
-                    .Include(l => l.Images)
-                    .FirstOrDefaultAsync(l => l.ListingId == id);
+                    .AsNoTracking()
+                    .Where(l => l.ListingId == id && l.Status != "Removed")
+                    .Select(l => new ListingDto
+                    {
+                        ListingId = l.ListingId,
+                        Title = l.Book.Title,
+                        Author = l.Book.Author,
+                        Category = l.Book.Category,
+                        Price = l.Price,
+                        Condition = l.Condition,
+                        City = l.City,
+                        Status = l.Status,
+                        SellerName = l.Seller.Name
+                    })
+                    .FirstOrDefaultAsync();
 
                 return listing is null ? Results.NotFound() : Results.Ok(listing);
             });
+
 
 
             // Search listings with filters, pagination, sorting
@@ -36,10 +48,15 @@ namespace Kitabi.Endpoints
                 string sortBy = "createdAt",
                 string sortOrder = "desc") =>
             {
+                page = Math.Max(page, 1);
+                pageSize = Math.Clamp(pageSize, 1, 50);
+
                 var query = db.Listings
                     .Include(l => l.Book)
                     .Include(l => l.Seller)
+                    .Where(l => l.Status != "Removed")
                     .AsQueryable();
+
 
                 if (!string.IsNullOrEmpty(title))
                     query = query.Where(l => l.Book.Title.Contains(title));
@@ -91,7 +108,7 @@ namespace Kitabi.Endpoints
                 return Results.Ok(results);
             });
             // Create a new listing
-         
+
         }
     }
 }
