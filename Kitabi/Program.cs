@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using Kitabi.Policies;
 using Kitabi.Services;
 using Serilog;
+using Microsoft.EntityFrameworkCore;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Warning()
@@ -20,7 +21,8 @@ Log.Logger = new LoggerConfiguration()
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("Kitabi");
-builder.Services.AddSqlServer<ApplicationDbContext>(connectionString);
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(connectionString));
 
 
 builder.Services.AddCors(options =>
