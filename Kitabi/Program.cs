@@ -28,7 +28,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
-        policy.WithOrigins("https://your-app.onrender.com",   // Render domain
+        policy.WithOrigins("https://techtalks-kitabi-3.onrender.com",   // Render domain
                            "http://localhost:5000",
                            "https://localhost:7004",
                            "http://localhost:5500",
