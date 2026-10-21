@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Kitabi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20261020155048_InitPostgres")]
+    [Migration("20261021142749_InitPostgres")]
     partial class InitPostgres
     {
         /// <inheritdoc />
