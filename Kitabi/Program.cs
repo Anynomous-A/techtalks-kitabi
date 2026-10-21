@@ -27,15 +27,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("Frontend", policy =>
-        policy.WithOrigins("https://localhost:7004",
-                "http://localhost:5500",
-                "http://127.0.0.1:5500")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials());
-});
+options.AddPolicy("Frontend", policy =>
+    policy.WithOrigins("http://localhost:5000",
+                   "https://localhost:7004",
+                   "http://localhost:5500",
+                   "http://127.0.0.1:5500")
+      .AllowAnyHeader()
+      .AllowAnyMethod()
+      .AllowCredentials());
 
+});
 // Add services to the container.
 builder.Services.AddRazorPages();
 
