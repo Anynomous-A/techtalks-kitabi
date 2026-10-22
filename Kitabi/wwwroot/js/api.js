@@ -7,7 +7,10 @@
 //     then retries the original request
 //   - Single-flight refresh: concurrent 401s share one refresh call
 
-const API_BASE = "http://localhost:5042";
+const API_BASE =
+  window.location.hostname.includes("localhost")
+    ? "http://localhost:5042"
+    : "";
 
 let refreshPromise = null;
 
