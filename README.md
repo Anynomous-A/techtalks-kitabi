@@ -1,164 +1,116 @@
-# techtalks-kitabi
-A lightweight, mobile‑first web app for Lebanon that connects students, libraries, and individuals to buy and sell new or used books at affordable prices. The platform focuses on simplicity:
+📚 Kitabi – Second‑Hand Book Marketplace
+Overview
+Kitabi is a web application designed to help students and readers in Lebanon exchange second‑hand books easily and affordably. The platform provides a simple marketplace where users can post listings, browse available books, and contact sellers directly via WhatsApp or SMS.
 
+This project was developed as part of the TechTalks internship program, focusing on building a Minimum Viable Product (MVP) with core functionality, usability, and deployment readiness.
 
-## 📖 Project Overview
-**Problem:** Students and readers struggle with the high cost of new books. Used books are scattered across WhatsApp groups or word‑of‑mouth, wasting time and limiting access.  
-**Target Users:** University students, school families, libraries, and individuals with surplus books.  
-**Solution:** A simple platform to post, browse, and connect directly with sellers for cash‑on‑delivery exchanges.
+✨ Features
+Book Listings: Add books with title, author, condition, price, and location.
 
----
+Search & Filters: Browse listings with keyword search and category filters.
 
-## ✅ Approved MVP
-**Core Features**
-1. Post a book (title, author, condition, price, location).  
-2. Browse and search listings by subject or price.  
-3. Contact seller via pre‑filled WhatsApp/SMS message.  
-4. Basic profiles to reduce spam and build trust.  
+Direct Contact: WhatsApp/SMS buttons to reach sellers instantly.
 
-**Out of Scope (Planned Later)**
-- Online payments (Visa, OMT, WishCard).  
-- Delivery tracking/logistics.  
-- Advertising or promotional dashboards.  
-- Advanced analytics/recommendations.  
+User Profiles: Basic profile creation and listing management.
 
-**Current Status:** Research validated, MVP scoped, awaiting mentor review before implementation.
+Responsive UI: Mobile‑first design for accessibility.
 
----
+🛠️ Technologies Used
+Backend: ASP.NET Minimal APIs, EF Core InMemory
 
-## 🛠 Tech Stack
-- **Frontend:** HTML, CSS, JavaScript (vanilla, mobile‑first).  
-- **Backend:** ASP.NET Core APIs and business logic.  
-- **Database:** SQL Server for listings, profiles, and transactions.  
-- **External Services:** WhatsApp/SMS integration for communication.  
+Frontend: HTML, CSS, JavaScript (responsive navigation, Help page)
 
----
+Database: PostgreSQL (for deployed version)
 
-## 👥 Team & Responsibilities
-- **Nizar abou ibrahim** – Team Lead, Backend/API development,Frontend/UI, Database, Research  
-- **Yehya Allaw**  – Backend/API development,Frontend/UI, Database, Research
-- *youseg alkadri* – Backend/API development,Frontend/UI, Database, Research
-- *mahmood koros* – Backend/API development,Frontend/UI, Database, Research
-- GitHub usernames: [to be added]  
-- Contact: [team email or group chat link]
+Deployment: Docker + Render
 
----
+Version Control: GitHub
 
-## 🚀 Getting Started
-**Prerequisites**
-- .NET 6+  
-- SQL Server  
-- Node.js (optional for tooling)  
+⚙️ Setup Instructions
+Prerequisites
+.NET 6+
 
-**Setup**
-```bash
-# Clone repo
-git clone https://github.com/your-org/techtalks-kitabi.git
-cd techtalks-kitabi
+Node.js (for frontend build tools if needed)
 
-# Backend setup
-dotnet restore
-dotnet run
+PostgreSQL (for production database)
 
-# Database setup
-# Create SQL Server DB and update connection string in appsettings.json
+Docker (optional, for containerized deployment)
 
-
-. Sprint 1 Outcomes
-
-✅ Database schema created (Users, Listings).
-
-✅ Book posting API implemented (POST /api/books).
-
-✅ Search API basic version implemented (GET /listings/search).
-
-✅ WhatsApp/SMS contact endpoint added.
-
-✅ Seeded test user (UserId = 1) for development.
-
-✅ README updated with setup instructions.
-
-3. Setup Instructions
-
-How to run the app locally:
+Steps
+Clone the repository
 
 bash
+git clone https://github.com/your-org/techtalks-kitabi.git
+cd techtalks-kitabi
+Backend setup
+
+bash
+cd Kitabi.Api
+dotnet restore
 dotnet run
-Database setup (EF Core migrations, seeding).
+Frontend setup
 
-Test user credentials (dummy email, phone, password hash).
-
-4. Usage Examples
-
-Create a book listing (form-data):
-
-Code
-POST /api/books
-SellerId=1
-Title=Algorithms
-Author=Cormen
-Price=25
-Condition=Good
-City=Beirut
-Search listings:
+bash
+cd Kitabi.Frontend
+npm install
+npm start
+Environment variables  
+Create a .env file with:
 
 Code
-GET /listings/search?title=Algorithms
-5. Known Limitations (Sprint 1)
+DB_CONNECTION_STRING=your_postgres_connection
+JWT_SECRET=your_secret_key
+Access the app
 
-No authentication yet.
+API runs on http://localhost:5000
 
-No advanced search filters (coming in Sprint 2).
+Frontend runs on http://localhost:3000
 
-No frontend UI (planned for Sprint 3).
+📐 System Architecture
+Code
+Frontend (React/HTML/CSS/JS) → Backend (ASP.NET Minimal APIs) → Database (PostgreSQL)
+Frontend: Handles user interface and navigation.
 
-6. Next Steps
+Backend: Provides REST endpoints for listings, profiles, and search.
 
-## 📅 Sprint 2 Outcomes
+Database: Stores book listings and user data.
 
-✅ Implemented **global input validation and sanitization middleware**  
-- All JSON requests are sanitized (HTML stripped, strings trimmed).  
-- Invalid payloads return structured error responses (`400 Bad Request` with JSON message + errors).  
+🚀 Deployment
+Dockerized: Build and run with docker-compose up.
 
-✅ Added **authentication & security policies**  
-- JWT Bearer authentication integrated into Swagger.  
-- Role‑based policies applied to protected endpoints.  
+Render: Deployed version available at: [Demo URL here]
 
-✅ Seeded **5 sample users** (buyers/sellers combined)  
-- Users include realistic names, emails, universities, and listings.  
-- Some users act as sellers with multiple listings, others as buyers only.  
-- Enables testing of both buyer and seller flows.  
+👥 Team Contributions
+Backend Development: API endpoints, EF Core, deployment setup
 
-✅ Enhanced **search API**  
-- Listings can be queried by title, author, or category.  
-- Results include seller and book details.  
+Frontend Development: Navbar, Help page, responsive design
 
----
+Database & Deployment: PostgreSQL migration, Docker setup
 
-### 🔍 How to Test Sprint 2
-1. **Run the app** and open Swagger UI.  
-2. **Authentication**:  
-   - Use JWT Bearer tokens to access protected endpoints.  
-   - Swagger now shows the `Authorize` button.  
-3. **Validation**:  
-   - Submit invalid payloads (e.g., missing required fields).  
-   - Confirm structured error JSON is returned.  
-4. **Seeding**:  
-   - Query `/listings/search` to see seeded books (e.g., *Clean Code*, *Database Systems*).  
-   - Test buyer/seller flows using seeded users (`nizar@example.com`, `sara@example.com`, etc.).  
+Documentation: README, final report, sprint notes
 
----
+🧪 Testing
+Manual testing of posting → browsing → contacting flow
 
-### ⚠️ Known Limitations (Sprint 2)
-- No advanced search filters yet (planned for Sprint 3).  
-- No frontend UI (planned for Sprint 3).  
-- File/image upload limited to basic functionality.  
+Edge case handling for invalid inputs
 
----
+Internal bug fixes during sprints
 
-### 🚀 Next Steps
-- **Sprint 3** will deliver:  
-  - Frontend integration (mobile‑first UI).  
-  - Advanced search filters (by city, condition, price range).  
-  - Improved listing image handling.  
+🔒 Security & Privacy
+Environment variables hidden in .env
 
+No credentials exposed in repository
+
+User data limited to non‑sensitive fields (name, contact, book info)
+
+📸 Screenshots
+(Add screenshots of posting form, browsing page, contact button, and profile page here)
+
+📈 Future Improvements
+Secure online payments
+
+Delivery tracking/logistics integration
+
+Recommendation engine for books
+
+Mobile app version
